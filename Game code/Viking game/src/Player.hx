@@ -52,10 +52,13 @@ class Player extends Sprite
 		//Movement
 		if (keys[39]) //Moving Right
 		{
+			playerBitmap.scaleX =  2;
 			velocity.x = 7; 
 		}
 		else if (keys[37]) //Moving Left
 		{
+			playerBitmap.scaleX = -2;
+			playerBitmap.x = playerBitmap.x - playerBitmap.width / 2;
 			velocity.x = -7;
 		}
 		else //Not Moving
