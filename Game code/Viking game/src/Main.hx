@@ -1,21 +1,25 @@
 package;
 
+import openfl.events.KeyboardEvent;
 import openfl.display.Sprite;
 import openfl.Lib;
+import src.Player;
 
-/**
- * ...
- * @author Floris Buskes
- */
 class Main extends Sprite 
 {
-
+	
+	var player:Player;
+	
 	public function new() 
 	{
 		super();
 		
-		// Assets:
-		// openfl.Assets.getBitmapData("img/assetname.jpg");
+		player = new Player();
+		addChild(player);
+		
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown);
+		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
+		
 	}
 
 }

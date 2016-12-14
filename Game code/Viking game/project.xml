@@ -3,12 +3,12 @@
 	<!-- NMML reference: https://gist.github.com/1763850 -->
 	
 	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
-	<meta title="Viking game" package="Vikinggame" version="1.0.0" company="Floris Buskes" />
+	<meta title="Project Game" package="ProjectGame" version="1.0.0" company="Archbishop of Banterberry" />
 	
 	<!-- output -->
-	<app main="Main" file="Vikinggame" path="bin" />
+	<app main="Main" file="ProjectGame" path="bin" />
 	
-	<window background="#000000" fps="60" />
+	<window background="#FFFFFF" fps="60" />
 	<window width="800" height="480" unless="mobile" />
 	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
 	
