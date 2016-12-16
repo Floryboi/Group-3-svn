@@ -27,7 +27,7 @@ class Player extends Sprite
 		
 		playerBitmap.scaleX = 2;
 		playerBitmap.scaleY = 2;
-		
+		playerBitmap.
 		addChild(playerBitmap);
 		
 		keys = [];
@@ -58,7 +58,7 @@ class Player extends Sprite
 		else if (keys[37]) //Moving Left
 		{
 			playerBitmap.scaleX = -2;
-			playerBitmap.x = playerBitmap.x - playerBitmap.width / 2;
+		//	playerBitmap.x = playerBitmap.x - playerBitmap.width / 2;
 			velocity.x = -7;
 		}
 		else //Not Moving
@@ -70,7 +70,7 @@ class Player extends Sprite
 		if (keys[32] && isOnGround && !jumped ) 
 		{
 			velocity.y = -13;
-			//jumped = true;
+			jumped = true;
 			//trace(jumpPress);
 		}
 		
@@ -87,6 +87,14 @@ class Player extends Sprite
 		}
 		*/
 		
+		
+		//Making so that player has to relese SPACE to jump again
+		if (!keys[32] && jumped)
+		{
+			jumped = false;
+		}
+		
+		
 		//Applying the velocities to the player
 		playerBitmap.y += velocity.y;
 		playerBitmap.x += velocity.x;
@@ -102,4 +110,5 @@ class Player extends Sprite
 		keys[evt.keyCode] = false;
 	}
 	
+	//function jump 
 }
