@@ -10,7 +10,9 @@ import openfl.display.BitmapData;
 
 class Player extends Sprite
 {
+	
 	private var gravity:Float = 1.5;
+	private var jumpHeight:Float = 15.0;
 	private var velocity:Point = new Point(0, 0);
 	private var keys:Array<Bool>;
 	private var isOnGround:Bool;
@@ -18,6 +20,8 @@ class Player extends Sprite
 	private var playerBitmap:Bitmap;
 	private var counter:Int = 0;
 	
+	
+	//run once upon creation
 	public function new() 
 	{
 		super();
@@ -27,13 +31,15 @@ class Player extends Sprite
 		
 		playerBitmap.scaleX = 2;
 		playerBitmap.scaleY = 2;
-		playerBitmap.
+		
 		addChild(playerBitmap);
 		
 		keys = [];
 		this.addEventListener(Event.ENTER_FRAME, everyFrame);
 	}
 	
+	
+	//Code that is run every frame
 	function everyFrame(evt:Event):Void
 	{
 		//Ground
@@ -54,11 +60,12 @@ class Player extends Sprite
 		{
 			playerBitmap.scaleX =  2;
 			velocity.x = 7; 
+			
 		}
 		else if (keys[37]) //Moving Left
 		{
 			playerBitmap.scaleX = -2;
-		//	playerBitmap.x = playerBitmap.x - playerBitmap.width / 2;
+			
 			velocity.x = -7;
 		}
 		else //Not Moving
@@ -69,7 +76,7 @@ class Player extends Sprite
 		//Jumping
 		if (keys[32] && isOnGround && !jumped ) 
 		{
-			velocity.y = -13;
+			velocity.y = -jumpHeight;
 			jumped = true;
 			//trace(jumpPress);
 		}
@@ -103,11 +110,16 @@ class Player extends Sprite
 	public function onKeyDown(evt:KeyboardEvent):Void
 	{
 		keys[evt.keyCode] = true;
+		if (evt.keyCode == 32)
+		{
+			trace("Pressed space");
+		}
 	}
 	
 	public function onKeyUp(evt:KeyboardEvent):Void
 	{
 		keys[evt.keyCode] = false;
+		
 	}
 	
 	//function jump 
