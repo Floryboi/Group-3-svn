@@ -7,3 +7,4 @@ DREAM STAVE - Destroy all enemies on the screen
 WAKING THE DEAD - Makes the enemies around you target other enemies
 WITCH RIDE - You now float in the air for some time
 Ottastafur - Moving enemies stop moving https://s-media-cache-ak0.pinimg.com/564x/fa/46/1f/fa461f380140209b90bec8920c6ec2d3.jpg
+Bacon - reference Sæhrímnir the creature that gets eaten every day https://en.wikipedia.org/wiki/S%C3%A6hr%C3%ADmnir
