@@ -9,6 +9,7 @@ class Main extends Sprite
 {
 	
 	var player:Player;
+	var level:Level;
 	
 	public function new() 
 	{
@@ -16,6 +17,8 @@ class Main extends Sprite
 		
 		player = new Player();
 		addChild(player);
+		level = new Level();
+		addChild(level);
 		
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown);
 		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);

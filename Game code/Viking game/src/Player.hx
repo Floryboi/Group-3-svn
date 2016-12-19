@@ -20,6 +20,7 @@ class Player extends Sprite
 	private var playerBitmap:Bitmap;
 	private var counter:Int = 0;
 	var canSpacebar:Bool = true;
+	var level : Level;
 	
 	//run once upon creation
 	public function new() 
@@ -38,9 +39,6 @@ class Player extends Sprite
 		this.addEventListener(Event.ENTER_FRAME, everyFrame);
 		trace("test");
 	}
-	
-	
-	
 	
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
@@ -92,12 +90,48 @@ class Player extends Sprite
 			jumped = false;
 		}
 		
+		var tileCoords:Point = new Point(0, 0);
+		var approximateCoords:Point = new Point();
 		
 		//Applying the velocities to the player
 		playerBitmap.y += velocity.y;
 		playerBitmap.x += velocity.x;
+		
+	}
+	/*
+	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 
+	{
+		// Bottom collision
+		if (velocity.y >= 0) {
+			
+			approximateCoords.x = playerBitmap.x / level.gridSize;
+			approximateCoords.y = playerBitmap.y / level.gridSize;
+			
+			tileCoords.y = Math.ceil(approximateCoords.y);
+        
+			tileCoords.x = Math.floor(approximateCoords.x);
+			
+			if (isBlock(tileCoords)) {
+				playerBitmap.y = (tileCoords.y - 1) * level.gridSize;
+				velocity.y = 0;
+				isOnGround = true;
+			}
+        
+			tileCoords.x = Math.ceil(approximateCoords.x);
+			
+			if (isBlock(tileCoords)) {
+				playerBitmap.y = (tileCoords.y - 1) * level.gridSize;
+				velocity.y = 0;
+				isOnGround = true;
+			}
+		}
 	}
 	
+	function isBlock(coords:Point):Bool 
+	{
+		return level.map[Math.round(coords.y)][Math.round(coords.x)] == 1;
+	}
+	*/
 	public function onKeyDown(evt:KeyboardEvent):Void
 	{
 		
