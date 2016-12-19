@@ -7,6 +7,7 @@ import openfl.events.KeyboardEvent;
 import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import src.Level;
 
 class Player extends Sprite
 {
@@ -26,7 +27,7 @@ class Player extends Sprite
 	public function new() 
 	{
 		super();
-		
+		level = new Level();
 		var playerData:BitmapData = Assets.getBitmapData( "img/Viking.png" );
     	playerBitmap = new Bitmap( playerData );
 		
@@ -43,7 +44,9 @@ class Player extends Sprite
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
 	{
-		//Ground
+		velocity.y += gravity;
+		/*
+		//Ground 
 		if (playerBitmap.y < 300) //When in the air
 		{
 			velocity.y += gravity;
@@ -54,7 +57,7 @@ class Player extends Sprite
 			velocity.y = 0;
 			playerBitmap.y = 300;
 			isOnGround = true;
-		}
+		} */
 		
 		//Movement
 		if (keys[39]) //Moving Right
@@ -97,11 +100,13 @@ class Player extends Sprite
 		playerBitmap.y += velocity.y;
 		playerBitmap.x += velocity.x;
 		
+		checkBottomCollision(tileCoords, approximateCoords);
+		
 	}
-	/*
+	
 	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 
-	{
-		// Bottom collision
+	{		
+		
 		if (velocity.y >= 0) {
 			
 			approximateCoords.x = playerBitmap.x / level.gridSize;
@@ -123,15 +128,15 @@ class Player extends Sprite
 				playerBitmap.y = (tileCoords.y - 1) * level.gridSize;
 				velocity.y = 0;
 				isOnGround = true;
-			}
-		}
+			} 
+		} 
 	}
 	
 	function isBlock(coords:Point):Bool 
 	{
 		return level.map[Math.round(coords.y)][Math.round(coords.x)] == 1;
 	}
-	*/
+	
 	public function onKeyDown(evt:KeyboardEvent):Void
 	{
 		
