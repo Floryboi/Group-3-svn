@@ -4,6 +4,7 @@ import openfl.events.KeyboardEvent;
 import openfl.display.Sprite;
 import openfl.Lib;
 import src.Player;
+import src.Level;
 
 class Main extends Sprite 
 {
