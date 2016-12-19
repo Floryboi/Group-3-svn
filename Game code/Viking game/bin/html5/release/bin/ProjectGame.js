@@ -12,7 +12,7 @@ var ApplicationMain = function() { };
 $hxClasses["ApplicationMain"] = ApplicationMain;
 ApplicationMain.__name__ = ["ApplicationMain"];
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "184", company : "Archbishop of Banterberry", file : "ProjectGame", fps : 60, name : "Project Game", orientation : "", packageName : "ProjectGame", version : "1.0.0", windows : [{ allowHighDPI : false, antialiasing : 0, background : 16777215, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : true, height : 480, hidden : null, maximized : null, minimized : null, parameters : "{}", resizable : true, stencilBuffer : true, title : "Project Game", vsync : false, width : 800, x : null, y : null}]};
+	ApplicationMain.config = { build : "188", company : "Archbishop of Banterberry", file : "ProjectGame", fps : 60, name : "Project Game", orientation : "", packageName : "ProjectGame", version : "1.0.0", windows : [{ allowHighDPI : false, antialiasing : 0, background : 16777215, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : true, height : 480, hidden : null, maximized : null, minimized : null, parameters : "{}", resizable : true, stencilBuffer : true, title : "Project Game", vsync : false, width : 800, x : null, y : null}]};
 };
 ApplicationMain.create = function() {
 	var app = new openfl_display_Application();
@@ -2937,7 +2937,7 @@ var lime_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 669751;
+	this.version = 914873;
 };
 $hxClasses["lime.AssetCache"] = lime_AssetCache;
 lime_AssetCache.__name__ = ["lime","AssetCache"];
@@ -34165,6 +34165,7 @@ var src_Player = function() {
 	this.addChild(this.playerBitmap);
 	this.keys = [];
 	this.addEventListener("enterFrame",$bind(this,this.everyFrame));
+	haxe_Log.trace("test",{ fileName : "Player.hx", lineNumber : 39, className : "src.Player", methodName : "new"});
 };
 $hxClasses["src.Player"] = src_Player;
 src_Player.__name__ = ["src","Player"];
@@ -34206,7 +34207,8 @@ src_Player.prototype = $extend(openfl_display_Sprite.prototype,{
 	}
 	,onKeyDown: function(evt) {
 		this.keys[evt.keyCode] = true;
-		if(evt.keyCode == 32) haxe_Log.trace("Pressed space",{ fileName : "Player.hx", lineNumber : 115, className : "src.Player", methodName : "onKeyDown"});
+		haxe_Log.trace(evt.keyCode,{ fileName : "Player.hx", lineNumber : 114, className : "src.Player", methodName : "onKeyDown"});
+		if(evt.keyCode == 32) haxe_Log.trace("Pressed space",{ fileName : "Player.hx", lineNumber : 117, className : "src.Player", methodName : "onKeyDown"});
 	}
 	,onKeyUp: function(evt) {
 		this.keys[evt.keyCode] = false;

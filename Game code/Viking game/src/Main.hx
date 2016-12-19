@@ -20,6 +20,7 @@ class Main extends Sprite
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown);
 		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
 		
+		
 	}
 
 }

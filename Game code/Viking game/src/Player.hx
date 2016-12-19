@@ -19,7 +19,7 @@ class Player extends Sprite
 	private var jumped:Bool = false;
 	private var playerBitmap:Bitmap;
 	private var counter:Int = 0;
-	
+	var canSpacebar:Bool = true;
 	
 	//run once upon creation
 	public function new() 
@@ -36,7 +36,10 @@ class Player extends Sprite
 		
 		keys = [];
 		this.addEventListener(Event.ENTER_FRAME, everyFrame);
+		trace("test");
 	}
+	
+	
 	
 	
 	//Code that is run every frame
@@ -80,19 +83,7 @@ class Player extends Sprite
 			jumped = true;
 			//trace(jumpPress);
 		}
-		
-		/*
-		if (jumped) //Counting time in the air
-		{
-			counter++;
-		}
-		
-		if (counter > 120) //Jump delay
-		{
-			counter = 0;
-			jumped = false;
-		}
-		*/
+	
 		
 		
 		//Making so that player has to relese SPACE to jump again
@@ -109,18 +100,24 @@ class Player extends Sprite
 	
 	public function onKeyDown(evt:KeyboardEvent):Void
 	{
+		
 		keys[evt.keyCode] = true;
-		if (evt.keyCode == 32)
+		if (canSpacebar)
 		{
-			trace("Pressed space");
+			if (evt.keyCode == 32)
+			{
+				trace("Char code: " + evt.charCode);
+				trace("Key code: " + evt.keyCode);
+				//trace("Pressed space");
+				canSpacebar = false;
+			}
 		}
 	}
 	
 	public function onKeyUp(evt:KeyboardEvent):Void
 	{
 		keys[evt.keyCode] = false;
+		canSpacebar = true;
 		
 	}
-	
-	//function jump 
 }
