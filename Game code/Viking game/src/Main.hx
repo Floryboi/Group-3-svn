@@ -16,12 +16,16 @@ class Main extends Sprite
 	{
 		super();
 		
+		//Adding the player
 		player = new Player();
 		addChild(player);
+		
+		//Displaying the level
 		level = new Level();
 		addChild(level);
 		
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown);
+		//This is to check for keypresses in the player class. Can't do it there because Main is special.
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
 		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
 		
 		
