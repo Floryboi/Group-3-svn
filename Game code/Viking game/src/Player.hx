@@ -114,7 +114,7 @@ class Player extends Sprite
 			//Turning the player's actual coordinates to ones based on our grid
 			approximateCoords.x = playerBitmap.x / level.gridSize;
 			//trace("approximateCoords.x" + approximateCoords.x);
-			approximateCoords.y = playerBitmap.y / level.gridSize;
+			approximateCoords.y = playerBitmap.y / (level.gridSize/2);
 			//trace("approximateCoords.y" + approximateCoords.y);
 			
 			tileCoords.y = Math.ceil(approximateCoords.y); //Round up
@@ -123,7 +123,7 @@ class Player extends Sprite
 			//trace("tileCoords.x" + tileCoords.x);
 			
 			if (isBlock(tileCoords)) { //If the tile we're going into is a block
-				playerBitmap.y = (tileCoords.y ) * level.gridSize - playerBitmap.height; //Snap the player above the block
+				playerBitmap.y = (tileCoords.y) * level.gridSize - playerBitmap.height; //Snap the player above the block. The weird math is to say how much above the block
 				velocity.y = 0; //Reset the player's velocity
 				isOnGround = true;			
 			}
@@ -141,7 +141,7 @@ class Player extends Sprite
 	}
 	
 	function isBlock(coords:Point):Bool 
-	{
+	{//Checking if the coordinate we're moving towards is a block
 		return level.map[Math.round(coords.y)][Math.round(coords.x)] == 1;
 	}
 	
