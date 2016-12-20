@@ -93,42 +93,50 @@ class Player extends Sprite
 			jumped = false;
 		}
 		
-		var tileCoords:Point = new Point(0, 0);
-		var approximateCoords:Point = new Point();
+		var tileCoords:Point = new Point(0, 0);//Where the tile we're moving into is located based on the grid
+		var approximateCoords:Point = new Point();//Where the player is located based on the level grid
 		
 		//Applying the velocities to the player
-		playerBitmap.y += velocity.y;
-		playerBitmap.x += velocity.x;
+		playerBitmap.y += velocity.y;//Apply the y velocity to the player
+		checkBottomCollision(tileCoords, approximateCoords);//Apply bottom collision
 		
-		checkBottomCollision(tileCoords, approximateCoords);
+		playerBitmap.x += velocity.x;//Apply the x velocity to the player
 		
+		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
 	}
 	
 	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 
-	{		
+	{//Bottom collision
 		
-		if (velocity.y >= 0) {
+		if (velocity.y >= 0) 
+		{//If we're falling
 			
+			//Turning the player's actual coordinates to ones based on our grid
 			approximateCoords.x = playerBitmap.x / level.gridSize;
+			//trace("approximateCoords.x" + approximateCoords.x);
 			approximateCoords.y = playerBitmap.y / level.gridSize;
+			//trace("approximateCoords.y" + approximateCoords.y);
 			
-			tileCoords.y = Math.ceil(approximateCoords.y);
-        
-			tileCoords.x = Math.floor(approximateCoords.x);
+			tileCoords.y = Math.ceil(approximateCoords.y); //Round up
+			//trace("tileCoords.y" + tileCoords.y);
+			tileCoords.x = Math.ceil(approximateCoords.x); // Round down
+			//trace("tileCoords.x" + tileCoords.x);
 			
-			if (isBlock(tileCoords)) {
-				playerBitmap.y = (tileCoords.y - 1) * level.gridSize;
-				velocity.y = 0;
-				isOnGround = true;
+			if (isBlock(tileCoords)) { //If the tile we're going into is a block
+				playerBitmap.y = (tileCoords.y ) * level.gridSize - playerBitmap.height; //Snap the player above the block
+				velocity.y = 0; //Reset the player's velocity
+				isOnGround = true;			
 			}
-        
+			
+			//We do this again because we often collide with 2 blocks at once
+			/*
 			tileCoords.x = Math.ceil(approximateCoords.x);
 			
 			if (isBlock(tileCoords)) {
 				playerBitmap.y = (tileCoords.y - 1) * level.gridSize;
 				velocity.y = 0;
 				isOnGround = true;
-			} 
+			} */
 		} 
 	}
 	
