@@ -63,10 +63,13 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
 		#end
 		
 		#if flash
 		
+		path.set ("img/block.png", "img/block.png");
+		type.set ("img/block.png", AssetType.IMAGE);
 		path.set ("img/obstacle_placeholder.png", "img/obstacle_placeholder.png");
 		type.set ("img/obstacle_placeholder.png", AssetType.IMAGE);
 		path.set ("img/Viking.png", "img/Viking.png");
@@ -78,6 +81,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#elseif html5
 		
 		var id;
+		id = "img/block.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
 		id = "img/obstacle_placeholder.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
@@ -104,6 +110,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
+		useManifest = true;
 		useManifest = true;
 		useManifest = true;
 		useManifest = true;
@@ -750,7 +757,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
+
 #elseif html5
+
 
 
 
