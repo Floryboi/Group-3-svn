@@ -12,7 +12,7 @@ import src.Level;
 class Player extends Sprite
 {
 	
-	private var gravity:Float = 1.5;
+	private var gravity:Float = .1;
 	private var jumpHeight:Float = 15.0;
 	private var velocity:Point = new Point(0, 0);
 	private var keys:Array<Bool>;
@@ -38,7 +38,7 @@ class Player extends Sprite
 		
 		keys = [];
 		this.addEventListener(Event.ENTER_FRAME, everyFrame);
-		trace("test");
+		
 	}
 	
 	//Code that is run every frame
@@ -112,7 +112,7 @@ class Player extends Sprite
 		{//If we're falling
 			
 			//Turning the player's actual coordinates to ones based on our grid
-			approximateCoords.y = (playerBitmap.y) / (level.gridSize/2);
+			approximateCoords.y = (playerBitmap.y + playerBitmap.height/2) / (level.gridSize);
 			//trace("approximateCoords.y" + approximateCoords.y);
 			
 			tileCoords.y = Math.ceil(approximateCoords.y); 
