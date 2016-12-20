@@ -112,18 +112,15 @@ class Player extends Sprite
 		{//If we're falling
 			
 			//Turning the player's actual coordinates to ones based on our grid
-			approximateCoords.x = playerBitmap.x / level.gridSize;
-			//trace("approximateCoords.x" + approximateCoords.x);
-			approximateCoords.y = playerBitmap.y / (level.gridSize/2);
+			approximateCoords.y = (playerBitmap.y) / (level.gridSize/2);
 			//trace("approximateCoords.y" + approximateCoords.y);
 			
-			tileCoords.y = Math.ceil(approximateCoords.y); //Round up
-			//trace("tileCoords.y" + tileCoords.y);
-			tileCoords.x = Math.ceil(approximateCoords.x); // Round down
-			//trace("tileCoords.x" + tileCoords.x);
+			tileCoords.y = Math.ceil(approximateCoords.y); 
+			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
 			
 			if (isBlock(tileCoords)) { //If the tile we're going into is a block
 				playerBitmap.y = (tileCoords.y) * level.gridSize - playerBitmap.height; //Snap the player above the block. The weird math is to say how much above the block
+				trace(playerBitmap.y);
 				velocity.y = 0; //Reset the player's velocity
 				isOnGround = true;			
 			}
