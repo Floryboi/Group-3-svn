@@ -102,7 +102,7 @@ class Player extends Sprite
 				First half of this equasion sets the collision point as the bottom of our character.
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
 			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x + playerBitmap.width) / level.gridSize; 
+			approximateCoords.x = (playerBitmap.x + playerBitmap.width / 2 ) / level.gridSize; 
 			
 			tileCoords.y = Math.ceil(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
