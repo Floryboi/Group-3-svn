@@ -88,6 +88,7 @@ class Player extends Sprite
 		
 		playerBitmap.x += velocity.x;	//Apply the x velocity to the player
 		checkRightCollision(tileCoords, approximateCoords);
+		checkLeftCollision(tileCoords, approximateCoords);
 		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
 	}
@@ -152,7 +153,7 @@ class Player extends Sprite
 			
 			//We do this again because we often collide with 2 blocks at once
 			
-			//tileCoords.x = Math.ceil(approximateCoords.x);
+			tileCoords.y = Math.floor(approximateCoords.y);
 			
 			if (isBlock(tileCoords)) {
 				playerBitmap.x = (tileCoords.x) * level.gridSize - playerBitmap.width ;
@@ -160,6 +161,44 @@ class Player extends Sprite
 				isOnGround = true;
 			} 
 		} 
+		
+	}
+	
+	function checkLeftCollision(tileCoords:Point, approximateCoords:Point):Void 
+	{//Left collision
+		
+		if (velocity.x <= 0) 
+		{//If we're moving left
+			
+			/*Turning the player's actual coordinates to ones based on our grid
+				First half of this equasion sets the collision point as the bottom of our character.
+				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
+				*/
+			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2) / level.gridSize; 
+			approximateCoords.x = (playerBitmap.x) / level.gridSize; 
+			
+			tileCoords.y = Math.floor(approximateCoords.y); 
+			tileCoords.x = Math.floor(approximateCoords.x); 
+			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
+			
+			if (isBlock(tileCoords)) { //If the tile we're going into is a block
+				playerBitmap.x = (tileCoords.x) * level.gridSize + playerBitmap.width; //Snap the player above the block. The weird math is to say how much above the block
+				
+				velocity.x = 0; //Reset the player's velocity
+				isOnGround = true;			
+			}
+			
+			//We do this again because we often collide with 2 blocks at once
+			
+			/*tileCoords.y = Math.floor(approximateCoords.y);
+			
+			if (isBlock(tileCoords)) {
+				playerBitmap.x = (tileCoords.x) * level.gridSize + playerBitmap.width ;
+				velocity.x = 0;
+				isOnGround = true;
+			} */
+		} 
+		
 	}
 	
 	function isBlock(coords:Point):Bool 
