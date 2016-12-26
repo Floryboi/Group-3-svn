@@ -175,7 +175,7 @@ class Player extends Sprite
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
 				*/
 			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x) / level.gridSize; 
+			approximateCoords.x = (playerBitmap.x - 20) / level.gridSize; 
 			
 			tileCoords.y = Math.floor(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
@@ -190,13 +190,13 @@ class Player extends Sprite
 			
 			//We do this again because we often collide with 2 blocks at once
 			
-			/*tileCoords.y = Math.floor(approximateCoords.y);
+			tileCoords.y = Math.ceil(approximateCoords.y);
 			
 			if (isBlock(tileCoords)) {
 				playerBitmap.x = (tileCoords.x) * level.gridSize + playerBitmap.width ;
 				velocity.x = 0;
 				isOnGround = true;
-			} */
+			} 
 		} 
 		
 	}
