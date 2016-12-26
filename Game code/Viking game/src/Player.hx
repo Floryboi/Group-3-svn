@@ -117,7 +117,7 @@ class Player extends Sprite
 			
 			//We do this again because we often collide with 2 blocks at once
 			
-			//tileCoords.x = Math.ceil(approximateCoords.x);
+			tileCoords.x = Math.ceil(approximateCoords.x);
 			
 			if (isBlock(tileCoords)) {
 				playerBitmap.y = (tileCoords.y ) * level.gridSize - playerBitmap.height;
