@@ -21,6 +21,7 @@ class Enemy extends Sprite
 	private var enemyBitmap:Bitmap;
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
+	var direction : Bool = true;
 	
 	//run once upon creation
 	public function new()
@@ -48,7 +49,7 @@ class Enemy extends Sprite
 	function everyFrame(evt:Event):Void
 	{
 		velocity.y += gravity; //Applying the acceleration of gravity to the player. This happens constantly and is only nullified by the collision functions
-		
+		/*
 		//Movement
 		if (keys[39]) //Moving Right
 		{
@@ -78,6 +79,7 @@ class Enemy extends Sprite
 		{
 			jumped = false;
 		}
+		*/
 		
 		var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
 		var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
@@ -90,7 +92,21 @@ class Enemy extends Sprite
 		checkRightCollision(tileCoords, approximateCoords);
 		checkLeftCollision(tileCoords, approximateCoords);
 		
+		artificialIntelligence(direction);
+		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
+	}
+	
+	public function artificialIntelligence(direction:Bool)
+	{
+		if (direction)
+		{
+			velocity.x = 7;
+		}
+		else if (!direction)
+		{
+			velocity.x = -7;
+		}
 	}
 	
 	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 
@@ -113,7 +129,7 @@ class Enemy extends Sprite
 				enemyBitmap.y = (tileCoords.y) * level.gridSize - enemyBitmap.height; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.y = 0; //Reset the player's velocity
-				isOnGround = true;			
+				isOnGround = true;		
 			}
 			
 			//We do this again because we often collide with 2 blocks at once
@@ -148,7 +164,8 @@ class Enemy extends Sprite
 				enemyBitmap.x = (tileCoords.x) * level.gridSize - enemyBitmap.width; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.x = 0; //Reset the player's velocity
-				isOnGround = true;			
+				isOnGround = true;
+				direction = false;
 			}
 			
 			//We do this again because we often collide with 2 blocks at once
@@ -159,6 +176,7 @@ class Enemy extends Sprite
 				enemyBitmap.x = (tileCoords.x) * level.gridSize - enemyBitmap.width ;
 				velocity.x = 0;
 				isOnGround = true;
+				direction = false;
 			} 
 		} 
 		
@@ -185,7 +203,8 @@ class Enemy extends Sprite
 				enemyBitmap.x = (tileCoords.x) * level.gridSize + enemyBitmap.width; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.x = 0; //Reset the player's velocity
-				isOnGround = true;			
+				isOnGround = true;	
+				direction = true;
 			}
 			
 			//We do this again because we often collide with 2 blocks at once
@@ -196,6 +215,7 @@ class Enemy extends Sprite
 				enemyBitmap.x = (tileCoords.x) * level.gridSize + enemyBitmap.width ;
 				velocity.x = 0;
 				isOnGround = true;
+				direction = true;
 			} 
 		} 
 		
