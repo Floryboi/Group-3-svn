@@ -98,12 +98,12 @@ class Enemy extends Sprite
 	}
 	
 	public function artificialIntelligence(direction:Bool)
-	{
-		if (direction)
+	{//This function moves the enemy based on the input of the collision functions
+		if (direction)	//true = right
 		{
 			velocity.x = 7;
 		}
-		else if (!direction)
+		else if (!direction)	//false = left
 		{
 			velocity.x = -7;
 		}

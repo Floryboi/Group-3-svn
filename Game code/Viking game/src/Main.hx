@@ -33,10 +33,10 @@ class Main extends Sprite
 		//This is to check for keypresses in the player class. Can't do it there because Main is special.
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, enemy.onKeyDown); 
 		stage.addEventListener(KeyboardEvent.KEY_UP, enemy.onKeyUp);
-		/*
+		
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
 		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
-		*/
+		
 	}
 
 }
