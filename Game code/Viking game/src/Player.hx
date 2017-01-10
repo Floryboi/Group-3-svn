@@ -8,6 +8,7 @@ import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import src.Level;
+import src.Ability;
 
 class Player extends Sprite
 {
@@ -21,6 +22,7 @@ class Player extends Sprite
 	private var playerBitmap:Bitmap;
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
+	var ability : Ability; 
 	
 	//run once upon creation
 	public function new()
@@ -90,6 +92,15 @@ class Player extends Sprite
 		checkRightCollision(tileCoords, approximateCoords);
 		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
+		
+		if (keys[81])
+		{
+			//new src.Ability();
+			
+			ability = new Ability();
+			addChild(ability);
+			trace("button is pressed");
+		}
 	}
 	
 	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 
@@ -169,7 +180,7 @@ class Player extends Sprite
 	
 	public function onKeyDown(evt:KeyboardEvent):Void
 	{
-		
+
 		keys[evt.keyCode] = true;
 		if (canSpacebar)
 		{
