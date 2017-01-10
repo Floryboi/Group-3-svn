@@ -11,8 +11,8 @@ import src.Level;
 
 class Player extends Sprite
 {
-	
-	private var gravity:Float = 1.5;
+	var slowdown: Float = .5;
+	var speed : Float = 2;
 	private var jumpHeight:Float = 15.0;
 	private var velocity:Point = new Point(0, 0); // Variable where we store the velocity to be added to the player. This is applied at the end of every frame loop.
 	private var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
@@ -46,37 +46,35 @@ class Player extends Sprite
 	
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
-	{
-		velocity.y += gravity; //Applying the acceleration of gravity to the player. This happens constantly and is only contradicted by the collision functions
-		
+	{		
 		//Movement
 		if (keys[39]) //Moving Right
 		{
 			//playerBitmap.scaleX =  2;
-			velocity.x = 7; //Movement speed
+			if (velocity.x < 7) velocity.x += speed; //Movement speed
 		}
-		else if (keys[37]) //Moving Left
+		if (keys[37]) //Moving Left
 		{
 			//playerBitmap.scaleX = -2; //Bad implementation someone please fix it
-			velocity.x = -7; //Movement speed
+			if (velocity.x > -7) velocity.x -= speed; //Movement speed
 		}
+		if (keys[40]) //Moving Down
+		{
+			//playerBitmap.scaleX = -2; //Bad implementation someone please fix it
+			if (velocity.y < 7) velocity.y += speed; //Movement speed
+		}
+		if (keys[38]) //Moving Up
+		{
+			//playerBitmap.scaleX = -2; //Bad implementation someone please fix it
+			if (velocity.y > -7) velocity.y -= speed; //Movement speed
+		}
+		
 		else //Not Moving
 		{
-			velocity.x = 0;
-		}
-		
-		//Jumping
-		if (keys[32] && isOnGround && !jumped ) //If the spacebar is pressed and we're on the ground and we have not already jumped
-		{
-			velocity.y = -jumpHeight; //Negative velocity is applied to the player, so they move up
-			jumped = true; //Keeping track we've jumped
-			
-		}
-		
-		//Making so that player has to relese SPACE to jump again
-		if (!keys[32] && jumped)
-		{
-			jumped = false;
+			if (velocity.x > 0) velocity.x -= slowdown;
+			if (velocity.x < 0) velocity.x += slowdown;
+			if (velocity.y > 0) velocity.y -= slowdown; 
+			if (velocity.y < 0) velocity.y += slowdown;
 		}
 		
 		var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
@@ -85,6 +83,7 @@ class Player extends Sprite
 		//Applying the velocities to the player
 		playerBitmap.y += velocity.y;	//Apply the y velocity to the player
 		checkBottomCollision(tileCoords, approximateCoords);	//Apply bottom collision
+		checkTopCollision(tileCoords, approximateCoords);
 		
 		playerBitmap.x += velocity.x;	//Apply the x velocity to the player
 		checkRightCollision(tileCoords, approximateCoords);
@@ -102,8 +101,8 @@ class Player extends Sprite
 			/*Turning the player's actual coordinates to ones based on our grid
 				First half of this equasion sets the collision point as the bottom of our character.
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
-			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x + playerBitmap.width / 2 ) / level.gridSize; 
+			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2 ) / level.gridSize; 
+			approximateCoords.x = (playerBitmap.x ) / level.gridSize; 
 			
 			tileCoords.y = Math.ceil(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
@@ -128,6 +127,41 @@ class Player extends Sprite
 		} 
 	}
 	
+	function checkTopCollision(tileCoords:Point, approximateCoords:Point):Void 
+	{//Bottom collision
+		
+		if (velocity.y <= 0) 
+		{//If we're falling
+			
+			/*Turning the player's actual coordinates to ones based on our grid
+				First half of this equasion sets the collision point as the bottom of our character.
+				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
+			approximateCoords.y = (playerBitmap.y) / level.gridSize; 
+			approximateCoords.x = (playerBitmap.x ) / level.gridSize; 
+			
+			tileCoords.y = Math.floor(approximateCoords.y); 
+			tileCoords.x = Math.floor(approximateCoords.x); 
+			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
+			
+			if (isBlock(tileCoords)) { //If the tile we're going into is a block
+				playerBitmap.y = (tileCoords.y) * level.gridSize + playerBitmap.height/2; //Snap the player above the block. The weird math is to say how much above the block
+				
+				velocity.y = 0; //Reset the player's velocity
+				isOnGround = true;			
+			}
+			
+			//We do this again because we often collide with 2 blocks at once
+			
+			tileCoords.x = Math.ceil(approximateCoords.x);
+			
+			if (isBlock(tileCoords)) {
+				playerBitmap.y = (tileCoords.y ) * level.gridSize + playerBitmap.height/2;
+				velocity.y = 0;
+				isOnGround = true;
+			} 
+		} 
+	}
+	
 	function checkRightCollision(tileCoords:Point, approximateCoords:Point):Void 
 	{//Bottom collision
 		
@@ -138,7 +172,7 @@ class Player extends Sprite
 				First half of this equasion sets the collision point as the bottom of our character.
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
 			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x + playerBitmap.width - 5) / level.gridSize; 
+			approximateCoords.x = (playerBitmap.x + playerBitmap.width ) / level.gridSize; 
 			
 			tileCoords.y = Math.ceil(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
@@ -182,7 +216,7 @@ class Player extends Sprite
 			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
 			
 			if (isBlock(tileCoords)) { //If the tile we're going into is a block
-				playerBitmap.x = (tileCoords.x) * level.gridSize + playerBitmap.width; //Snap the player above the block. The weird math is to say how much above the block
+				playerBitmap.x = (tileCoords.x) * level.gridSize + playerBitmap.width ; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.x = 0; //Reset the player's velocity
 				isOnGround = true;			
