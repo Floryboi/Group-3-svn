@@ -33,6 +33,8 @@ class Player extends Sprite
 		var playerData:BitmapData = Assets.getBitmapData( "img/VikingGood.png" ); 
     	playerBitmap = new Bitmap( playerData );
 		
+		playerBitmap.x = playerBitmap.y = 100;
+		
 		//We don't have to do this, but he looks much better. Draws the focus to him instead of the ground or background
 		playerBitmap.scaleX = 2;
 		playerBitmap.scaleY = 2;
@@ -47,26 +49,39 @@ class Player extends Sprite
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
 	{		
+		if (playerBitmap.y <= 5) playerBitmap.y = 5;
 		//Movement
 		if (keys[39]) //Moving Right
 		{
-			//playerBitmap.scaleX =  2;
-			if (velocity.x < 7) velocity.x += speed; //Movement speed
+			if (playerBitmap.x > 5)
+			{
+				if (velocity.x < 7) velocity.x += speed; //Movement speed
+			}
+			else playerBitmap.x = 6;
 		}
 		if (keys[37]) //Moving Left
 		{
-			//playerBitmap.scaleX = -2; //Bad implementation someone please fix it
-			if (velocity.x > -7) velocity.x -= speed; //Movement speed
+			if (playerBitmap.x > 5)
+			{
+				if (velocity.x > -7) velocity.x -= speed; //Movement speed
+			}
+			else playerBitmap.x = 6;
 		}
 		if (keys[40]) //Moving Down
 		{
-			//playerBitmap.scaleX = -2; //Bad implementation someone please fix it
-			if (velocity.y < 7) velocity.y += speed; //Movement speed
+			if (playerBitmap.y > 8)
+			{
+				if (velocity.y < 7) velocity.y += speed; //Movement speed
+			}
+			else playerBitmap.y = 8;
 		}
 		if (keys[38]) //Moving Up
 		{
-			//playerBitmap.scaleX = -2; //Bad implementation someone please fix it
-			if (velocity.y > -7) velocity.y -= speed; //Movement speed
+			if (playerBitmap.y > 8)
+			{
+				if (velocity.y > -7) velocity.y -= speed; //Movement speed
+			}
+			else playerBitmap.y = 8;
 		}
 		
 		else //Not Moving
