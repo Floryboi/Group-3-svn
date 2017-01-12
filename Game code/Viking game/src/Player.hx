@@ -49,39 +49,22 @@ class Player extends Sprite
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
 	{		
-		if (playerBitmap.y <= 5) playerBitmap.y = 5;
 		//Movement
 		if (keys[39]) //Moving Right
 		{
-			if (playerBitmap.x > 5)
-			{
-				if (velocity.x < 7) velocity.x += speed; //Movement speed
-			}
-			else playerBitmap.x = 6;
+			if (velocity.x < 7) velocity.x += speed; //Movement speed
 		}
 		if (keys[37]) //Moving Left
 		{
-			if (playerBitmap.x > 5)
-			{
-				if (velocity.x > -7) velocity.x -= speed; //Movement speed
-			}
-			else playerBitmap.x = 6;
+			if (velocity.x > -7) velocity.x -= speed; //Movement speed
 		}
 		if (keys[40]) //Moving Down
 		{
-			if (playerBitmap.y > 8)
-			{
-				if (velocity.y < 7) velocity.y += speed; //Movement speed
-			}
-			else playerBitmap.y = 8;
+			if (velocity.y < 7) velocity.y += speed; //Movement speed
 		}
 		if (keys[38]) //Moving Up
 		{
-			if (playerBitmap.y > 8)
-			{
-				if (velocity.y > -7) velocity.y -= speed; //Movement speed
-			}
-			else playerBitmap.y = 8;
+			if (velocity.y > -7) velocity.y -= speed; //Movement speed
 		}
 		
 		else //Not Moving
@@ -94,6 +77,13 @@ class Player extends Sprite
 		
 		var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
 		var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
+		
+		if (playerBitmap.y >= stage.height + 80) playerBitmap.y = stage.height + 80;
+		if (playerBitmap.y <= 10) playerBitmap.y = 10;
+		if (playerBitmap.x <= 10) playerBitmap.x = 10;
+		if (playerBitmap.x >= stage.width - 60) playerBitmap.x = stage.width - 60;
+		
+		trace(stage.width + " " + playerBitmap.x);
 		
 		//Applying the velocities to the player
 		playerBitmap.y += velocity.y;	//Apply the y velocity to the player

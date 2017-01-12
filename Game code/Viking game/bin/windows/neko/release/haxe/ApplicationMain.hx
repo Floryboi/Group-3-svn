@@ -26,8 +26,8 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "551",
-			company: "Archbishop of Banterberry",
+			build: "602",
+			company: "Top keks",
 			file: "ProjectGame",
 			fps: 60,
 			name: "Project Game",
@@ -43,9 +43,9 @@ class ApplicationMain {
 					borderless: false,
 					depthBuffer: false,
 					display: 0,
-					fullscreen: false,
+					fullscreen: true,
 					hardware: true,
-					height: 480,
+					height: 600,
 					hidden: #if munit true #else null #end,
 					maximized: null,
 					minimized: null,
@@ -72,7 +72,7 @@ class ApplicationMain {
 		
 		#if (js && html5)
 		#if (munit || utest)
-		embed (null, 800, 480, "null");
+		embed (null, 800, 600, "null");
 		#end
 		#else
 		create ();
