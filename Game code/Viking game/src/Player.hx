@@ -4,6 +4,7 @@ import openfl.Assets;
 import openfl.display.Sprite;
 import flash.events.Event;
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -23,6 +24,8 @@ class Player extends Sprite
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
 	var ability : Ability; 
+	var abilitied : Bool = false;
+	var clicked : Bool = false;
 	
 	//run once upon creation
 	public function new()
@@ -44,6 +47,7 @@ class Player extends Sprite
 		keys = []; //Defining the array we use to store the keyboard keys. It's empty because it's populated by the respective functions
 		
 		this.addEventListener(Event.ENTER_FRAME, everyFrame); //The game is frame based, so we're tracking things that happen every frame in the everyFrame function
+	//	Level.addEventListener( MouseEvent.CLICK, abil );
 	}
 	
 	//Code that is run every frame
@@ -99,7 +103,27 @@ class Player extends Sprite
 			
 			ability = new Ability();
 			addChild(ability);
-			trace("button is pressed");
+			abilitied = true;
+			ability.x = playerBitmap.x;
+			ability.y = playerBitmap.y;   
+		}
+		
+		
+		if (abilitied && !clicked)
+		{
+		ability.x = playerBitmap.x;
+		ability.y = playerBitmap.y;
+		} 
+	}
+	
+	public function abil(Event: MouseEvent)
+	{
+		if (abilitied)
+		{
+			ability.x = Event.localX;
+			ability.y = Event.localY;
+			abilitied = false;
+			clicked = true;
 		}
 	}
 	

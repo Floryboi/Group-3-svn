@@ -3,6 +3,7 @@ package src;
 import openfl.Assets;
 import openfl.display.Sprite;
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -14,6 +15,7 @@ class Level extends Sprite
 	public var gridSize:Int; //The pixel size of one block
 	var blocks:Sprite; //The sprite container that's storing the whole level
 	var blockBitmap:Bitmap;
+//	var player : Player = new Player();
 	
 	public function new() 
 	{
@@ -71,6 +73,7 @@ class Level extends Sprite
 			}
 		}
 		addChild(blocks); //Finally, adding the container with all the bitmaps which is displayed on the screen.
+	//	stage.addEventListener( MouseEvent.CLICK, Player.abil );
 	}
 	
 }
