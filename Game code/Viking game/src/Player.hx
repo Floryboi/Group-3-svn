@@ -8,6 +8,7 @@ import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import motion.Actuate;
 import src.Level;
 import src.Ability;
 
@@ -16,7 +17,7 @@ class Player extends Sprite
 	
 	private var gravity:Float = 1.5;
 	private var jumpHeight:Float = 15.0;
-	private var velocity:Point = new Point(0, 0); // Variable where we store the velocity to be added to the player. This is applied at the end of every frame loop.
+	private var velocity:Point = new Point(0, 0);// Variable where we store the velocity to be added to the player. This is applied at the end of every frame loop.
 	private var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
 	private var isOnGround:Bool; //Are we colliding?
 	private var jumped:Bool = false; //To keep track if we're in the air from a jump
@@ -25,7 +26,7 @@ class Player extends Sprite
 	var level : Level; //Referencing the level class, so we can read from it
 	var ability : Ability; 
 	var abilitied : Bool = false;
-	var clicked : Bool = false;
+	var clicked : Bool = true;
 	
 	//run once upon creation
 	public function new()
@@ -56,12 +57,12 @@ class Player extends Sprite
 		velocity.y += gravity; //Applying the acceleration of gravity to the player. This happens constantly and is only contradicted by the collision functions
 		
 		//Movement
-		if (keys[39]) //Moving Right
+		if (keys[68]) //Moving Right
 		{
 			//playerBitmap.scaleX =  2;
 			velocity.x = 7; //Movement speed
 		}
-		else if (keys[37]) //Moving Left
+		else if (keys[65]) //Moving Left
 		{
 			//playerBitmap.scaleX = -2; //Bad implementation someone please fix it
 			velocity.x = -7; //Movement speed
@@ -97,17 +98,21 @@ class Player extends Sprite
 		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
 		
+		
+		
 		if (keys[81])
 		{
 			//new src.Ability();
-			
+			if (clicked)
+			{
 			ability = new Ability();
 			addChild(ability);
 			abilitied = true;
+			clicked = false;
 			ability.x = playerBitmap.x;
-			ability.y = playerBitmap.y;   
+			ability.y = playerBitmap.y;
+			}
 		}
-		
 		
 		if (abilitied && !clicked)
 		{
@@ -120,11 +125,16 @@ class Player extends Sprite
 	{
 		if (abilitied)
 		{
-			ability.x = Event.localX;
-			ability.y = Event.localY;
+		//	ability.x = Event.localX;
+		//	ability.y = Event.localY;
 			abilitied = false;
-			clicked = true;
+		//	var target : Point = new Point(0, 0);
+		//	target.x = Event.localX * 10;
+		//	target.y = Event.localY * 10;
+			Actuate.tween( ability, 7, { x: Event.localX, y: Event.localY } );
+			
 		}
+		clicked = true;
 	}
 	
 	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 
