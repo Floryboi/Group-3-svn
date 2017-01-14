@@ -11,6 +11,7 @@ import openfl.display.BitmapData;
 import motion.Actuate;
 import src.Level;
 import src.Ability;
+import openfl.Lib;
 
 class Player extends Sprite
 {
@@ -27,6 +28,8 @@ class Player extends Sprite
 	var ability : Ability; 
 	var abilitied : Bool = false;
 	var clicked : Bool = true;
+	var abilitySpeed : Point = new Point(0, 0);
+	var rotationInRadians = Math.atan2( 0, 0 );
 	
 	//run once upon creation
 	public function new()
@@ -111,14 +114,25 @@ class Player extends Sprite
 			clicked = false;
 			ability.x = playerBitmap.x;
 			ability.y = playerBitmap.y;
+			trace (ability.velocity.x);
 			}
 		}
 		
 		if (abilitied && !clicked)
 		{
-		ability.x = playerBitmap.x;
-		ability.y = playerBitmap.y;
+			ability.x = playerBitmap.x;
+			ability.y = playerBitmap.y;
 		} 
+		
+		if (abilitied && clicked)
+		{
+		//	var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
+			ability.rotation = rotationInRadians * 180 / Math.PI;
+			abilitySpeed = Point.polar(10, rotationInRadians);
+			ability.x += abilitySpeed.x;
+			ability.y += abilitySpeed.y;
+			
+		}
 	}
 	
 	public function abil(Event: MouseEvent)
@@ -127,11 +141,20 @@ class Player extends Sprite
 		{
 		//	ability.x = Event.localX;
 		//	ability.y = Event.localY;
-			abilitied = false;
-		//	var target : Point = new Point(0, 0);
+			//abilitied = false;
+			var target : Point = new Point(0, 0);
+			rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
 		//	target.x = Event.localX * 10;
 		//	target.y = Event.localY * 10;
-			Actuate.tween( ability, 7, { x: Event.localX, y: Event.localY } );
+		//	Actuate.tween( ability, 1, { x: Event.localX, y: Event.localY } );
+	//	var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
+ 		
+ 	//	ability.rotation = rotationInRadians * 180 / Math.PI;
+	
+ 	//	abilitySpeed = Point.polar(10, rotationInRadians);
+	//	trace(abilitySpeed);
+ 	//	x += abilitySpeed.x;
+ 	//	y += abilitySpeed.y;      
 			
 		}
 		clicked = true;

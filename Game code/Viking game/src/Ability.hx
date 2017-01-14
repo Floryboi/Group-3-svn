@@ -25,6 +25,8 @@ class Ability extends Sprite
 		var abilityData:BitmapData = Assets.getBitmapData( "img/ability_test.png" ); 
     	var abilityBitmap:Bitmap = new Bitmap( abilityData );
 		
+		velocity = new Point (0, 0);
+		
 		addChild(abilityBitmap);
 	}
 	
