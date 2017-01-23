@@ -26,7 +26,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "602",
+			build: "639",
 			company: "Top keks",
 			file: "ProjectGame",
 			fps: 60,
@@ -43,9 +43,9 @@ class ApplicationMain {
 					borderless: false,
 					depthBuffer: false,
 					display: 0,
-					fullscreen: true,
+					fullscreen: false,
 					hardware: true,
-					height: 600,
+					height: 720,
 					hidden: #if munit true #else null #end,
 					maximized: null,
 					minimized: null,
@@ -54,7 +54,7 @@ class ApplicationMain {
 					stencilBuffer: true,
 					title: "Project Game",
 					vsync: false,
-					width: 800,
+					width: 1280,
 					x: null,
 					y: null
 				},
@@ -72,7 +72,7 @@ class ApplicationMain {
 		
 		#if (js && html5)
 		#if (munit || utest)
-		embed (null, 800, 600, "null");
+		embed (null, 1280, 720, "null");
 		#end
 		#else
 		create ();

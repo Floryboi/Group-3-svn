@@ -18,7 +18,7 @@ class Enemy extends Sprite
 	private var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
 	private var isOnGround:Bool; //Are we colliding?
 	private var jumped:Bool = false; //To keep track if we're in the air from a jump
-	private var enemyBitmap:Bitmap;
+	public var enemyBitmap:Bitmap;
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
 	var direction : Bool = true;
@@ -37,6 +37,10 @@ class Enemy extends Sprite
 		//We don't have to do this, but he looks much better. Draws the focus to him instead of the ground or background
 		enemyBitmap.scaleX = 2;
 		enemyBitmap.scaleY = 2;
+		enemyBitmap.x = -enemyBitmap.width / 2;
+		enemyBitmap.y = -enemyBitmap.height / 2;
+		
+		enemyBitmap.x = enemyBitmap.y = 300;
 		
 		addChild(enemyBitmap); //Adding the player sprite to the scene
 		
@@ -48,7 +52,7 @@ class Enemy extends Sprite
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
 	{
-		velocity.y += gravity; //Applying the acceleration of gravity to the player. This happens constantly and is only nullified by the collision functions
+		//velocity.y += gravity; //Applying the acceleration of gravity to the player. This happens constantly and is only nullified by the collision functions
 		/*
 		//Movement
 		if (keys[39]) //Moving Right
@@ -81,18 +85,23 @@ class Enemy extends Sprite
 		}
 		*/
 		
+		if (enemyBitmap.y >= stage.height + 80) enemyBitmap.y = stage.height + 80;
+		if (enemyBitmap.y <= 10) enemyBitmap.y = 10;
+		if (enemyBitmap.x <= 10) enemyBitmap.x = 10;
+		if (enemyBitmap.x >= stage.width - 60) enemyBitmap.x = stage.width - 60;
+		
 		var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
 		var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
 		
 		//Applying the velocities to the player
 		enemyBitmap.y += velocity.y;	//Apply the y velocity to the player
-		checkBottomCollision(tileCoords, approximateCoords);	//Apply bottom collision
+		//checkBottomCollision(tileCoords, approximateCoords);	//Apply bottom collision
 		
 		enemyBitmap.x += velocity.x;	//Apply the x velocity to the player
-		checkRightCollision(tileCoords, approximateCoords);
-		checkLeftCollision(tileCoords, approximateCoords);
+		//checkRightCollision(tileCoords, approximateCoords);
+		//checkLeftCollision(tileCoords, approximateCoords);
 		
-		artificialIntelligence(direction);
+		//artificialIntelligence(direction);
 		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
 	}
@@ -107,6 +116,41 @@ class Enemy extends Sprite
 		{
 			velocity.x = -7;
 		}
+	}
+	
+	function checkTopCollision(tileCoords:Point, approximateCoords:Point):Void 
+	{//Bottom collision
+		
+		if (velocity.y <= 0) 
+		{//If we're falling
+			
+			/*Turning the player's actual coordinates to ones based on our grid
+				First half of this equasion sets the collision point as the bottom of our character.
+				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
+			approximateCoords.y = (enemyBitmap.y) / level.gridSize; 
+			approximateCoords.x = (enemyBitmap.x ) / level.gridSize; 
+			
+			tileCoords.y = Math.floor(approximateCoords.y); 
+			tileCoords.x = Math.floor(approximateCoords.x); 
+			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
+			
+			if (isBlock(tileCoords)) { //If the tile we're going into is a block
+				enemyBitmap.y = (tileCoords.y) * level.gridSize + enemyBitmap.height/2; //Snap the player above the block. The weird math is to say how much above the block
+				
+				velocity.y = 0; //Reset the player's velocity
+				isOnGround = true;			
+			}
+			
+			//We do this again because we often collide with 2 blocks at once
+			
+			tileCoords.x = Math.ceil(approximateCoords.x);
+			
+			if (isBlock(tileCoords)) {
+				enemyBitmap.y = (tileCoords.y ) * level.gridSize + enemyBitmap.height/2;
+				velocity.y = 0;
+				isOnGround = true;
+			} 
+		} 
 	}
 	
 	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 

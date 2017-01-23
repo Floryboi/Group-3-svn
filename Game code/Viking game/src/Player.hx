@@ -18,9 +18,10 @@ class Player extends Sprite
 	private var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
 	private var isOnGround:Bool; //Are we colliding?
 	private var jumped:Bool = false; //To keep track if we're in the air from a jump
-	private var playerBitmap:Bitmap;
+	public var playerBitmap:Bitmap;
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
+	var enemy : Enemy;
 	
 	//run once upon creation
 	public function new()
@@ -49,6 +50,7 @@ class Player extends Sprite
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
 	{		
+		
 		//Movement
 		if (keys[39]) //Moving Right
 		{
@@ -82,9 +84,7 @@ class Player extends Sprite
 		if (playerBitmap.y <= 10) playerBitmap.y = 10;
 		if (playerBitmap.x <= 10) playerBitmap.x = 10;
 		if (playerBitmap.x >= stage.width - 60) playerBitmap.x = stage.width - 60;
-		
-		trace(stage.width + " " + playerBitmap.x);
-		
+				
 		//Applying the velocities to the player
 		playerBitmap.y += velocity.y;	//Apply the y velocity to the player
 		checkBottomCollision(tileCoords, approximateCoords);	//Apply bottom collision
