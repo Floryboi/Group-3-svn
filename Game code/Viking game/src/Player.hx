@@ -26,10 +26,12 @@ class Player extends Sprite
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
 	var ability : Ability; 
-	var abilitied : Bool = false;
-	var clicked : Bool = true;
-	var abilitySpeed : Point = new Point(0, 0);
-	var rotationInRadians = Math.atan2( 0, 0 );
+	public var abilitied : Bool = false;  //A check for making abilities work
+	public var clicked : Bool = true;     //A-nother check for making abilities work
+	//public var abilitySpeed : Point = new Point(0, 0);
+	public var rotationInRadians = Math.atan2( 0, 0 );
+	var abilities : Array<Ability> = [];
+	var timer : Int = 0;
 	
 	//run once upon creation
 	public function new()
@@ -103,39 +105,61 @@ class Player extends Sprite
 		
 		
 		
-		if (keys[81])
+		if (keys[81])  //Pressing Q button
 		{
 			if (clicked)
 			{
-			ability = new Ability();
+			//	if (!abilitied)
+			//	{
+			ability = new Ability();  //Adding the ability to the screen
+		//	abilities.push(ability);
+			//	}
 			addChild(ability);
+			abilities.push(ability);
 			abilitied = true;
 			clicked = false;
-		//	ability.x = playerBitmap.x;
-		//	ability.y = playerBitmap.y;
-			trace (ability.velocity.x);
+			trace("bololo");
 			}
 		}
 		
 		if (abilitied && !clicked)
 		{
-			ability.x = playerBitmap.x;  //Putting the ability sprite on the player
-			ability.y = playerBitmap.y;
+			ability.x = playerBitmap.x+32;  //Putting the ability sprite on the player
+			ability.y = playerBitmap.y+36;
 		} 
 		
 		if (abilitied && clicked)
 		{
 			ability.rotation = rotationInRadians * 180 / Math.PI;   //Rotating the ability in sprite in the right direction
-			abilitySpeed = Point.polar(10, rotationInRadians);    //Sets the thingy to move
-			ability.x += abilitySpeed.x;
-			ability.y += abilitySpeed.y;
 			
-		}
+			ability.velocity = Point.polar(10, rotationInRadians);    //Sets the thingy to move
+		//	for (a in abilities)
+		//	{
+		//	a.x += ability.velocity.x;
+		//	a.y += ability.velocity.y;
+		//	}
+			if (ability.x > 850 || ability.y > 500  || ability.x  <0 || ability.y < 0 || timer == 299)
+			{
+				removeChild(ability);
+			}
+		} 
+		
+		for (a in abilities)
+			{
+			a.x += a.velocity.x;
+			a.y += a.velocity.y;
+			}
+			
+	/*	timer += 1;
+		if (timer == 300)
+		{
+			timer = 0;
+		}    */
 	}
 	
 	public function abil(Event: MouseEvent)
 	{
-		if (abilitied)
+		if (abilitied && !clicked)
 		{
 			var target : Point = new Point(0, 0);
 			rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );  //Gets the direction of the mouse click   

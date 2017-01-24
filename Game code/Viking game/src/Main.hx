@@ -6,6 +6,7 @@ import openfl.display.Sprite;
 import openfl.Lib;
 import src.Player;
 import src.Level;
+import src.Ability;
 
 class Main extends Sprite 
 {
