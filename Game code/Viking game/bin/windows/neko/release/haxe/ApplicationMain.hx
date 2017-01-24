@@ -26,7 +26,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "539",
+			build: "552",
 			company: "Archbishop of Banterberry",
 			file: "ProjectGame",
 			fps: 60,

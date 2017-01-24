@@ -105,30 +105,28 @@ class Player extends Sprite
 		
 		if (keys[81])
 		{
-			//new src.Ability();
 			if (clicked)
 			{
 			ability = new Ability();
 			addChild(ability);
 			abilitied = true;
 			clicked = false;
-			ability.x = playerBitmap.x;
-			ability.y = playerBitmap.y;
+		//	ability.x = playerBitmap.x;
+		//	ability.y = playerBitmap.y;
 			trace (ability.velocity.x);
 			}
 		}
 		
 		if (abilitied && !clicked)
 		{
-			ability.x = playerBitmap.x;
+			ability.x = playerBitmap.x;  //Putting the ability sprite on the player
 			ability.y = playerBitmap.y;
 		} 
 		
 		if (abilitied && clicked)
 		{
-		//	var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
-			ability.rotation = rotationInRadians * 180 / Math.PI;
-			abilitySpeed = Point.polar(10, rotationInRadians);
+			ability.rotation = rotationInRadians * 180 / Math.PI;   //Rotating the ability in sprite in the right direction
+			abilitySpeed = Point.polar(10, rotationInRadians);    //Sets the thingy to move
 			ability.x += abilitySpeed.x;
 			ability.y += abilitySpeed.y;
 			
@@ -139,23 +137,8 @@ class Player extends Sprite
 	{
 		if (abilitied)
 		{
-		//	ability.x = Event.localX;
-		//	ability.y = Event.localY;
-			//abilitied = false;
 			var target : Point = new Point(0, 0);
-			rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
-		//	target.x = Event.localX * 10;
-		//	target.y = Event.localY * 10;
-		//	Actuate.tween( ability, 1, { x: Event.localX, y: Event.localY } );
-	//	var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
- 		
- 	//	ability.rotation = rotationInRadians * 180 / Math.PI;
-	
- 	//	abilitySpeed = Point.polar(10, rotationInRadians);
-	//	trace(abilitySpeed);
- 	//	x += abilitySpeed.x;
- 	//	y += abilitySpeed.y;      
-			
+			rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );  //Gets the direction of the mouse click   
 		}
 		clicked = true;
 	}
