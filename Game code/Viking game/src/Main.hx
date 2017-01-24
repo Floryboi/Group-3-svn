@@ -1,12 +1,16 @@
 package;
 
 import flash.events.Event;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.events.KeyboardEvent;
 import openfl.display.Sprite;
 import openfl.Lib;
 import src.Player;
 import src.Level;
 import src.Enemy;
+
+import openfl.geom.Point;
 
 import openfl.text.TextField;
 import openfl.text.TextFormat;
@@ -17,11 +21,17 @@ class Main extends Sprite
 {
 	
 	var player:Player;
-	var enemy:Enemy;
+	//var enemy:Enemy;
 	var level:Level;
 	
 	var textFormat:TextFormat = new TextFormat("Tahoma", 72, 4967498, true);
 	var endGameField = new TextField();
+	
+	var hit:Bool = false;
+	var spawned:Bool = false;
+	
+	var spawnTimer:Int = 60;
+	var enemies:Array<Enemy> = new Array<Enemy>();
 	
 	public function new() 
 	{
@@ -34,16 +44,12 @@ class Main extends Sprite
 		addChild(player);
 		
 		//Adding the player
-		enemy = new Enemy();
+		var enemy = new Enemy();
 		addChild(enemy);
 		
 		//Displaying the level
 		level = new Level();
 		addChild(level);
-		
-		//This is to check for keypresses in the player class. Can't do it there because Main is special.
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, enemy.onKeyDown); 
-		stage.addEventListener(KeyboardEvent.KEY_UP, enemy.onKeyUp);
 		
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
 		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
@@ -53,27 +59,75 @@ class Main extends Sprite
 	
 	function everyFrame(evt:Event):Void
 	{
-		if ((player.playerBitmap.x + player.playerBitmap.width/2 > enemy.enemyBitmap.x - 20 && player.playerBitmap.x + player.playerBitmap.width/2 < enemy.enemyBitmap.x + 20)
-		&& (player.playerBitmap.y + player.playerBitmap.height/2 > enemy.enemyBitmap.y - 20 && player.playerBitmap.y + player.playerBitmap.height/2 < enemy.enemyBitmap.y + 20)) 
+		enemySpawning();
+		
+		if (hit == false && spawned == true)
 		{
-			trace("Hit");
+			for (enemy in enemies)
+			{
+			var rotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
 			
-			addChild(endGameField);
-			endGameField.width = 500;
-			endGameField.height = 85;
-			endGameField.y = Lib.current.stage.stageHeight/2 - endGameField.height/2;
-			endGameField.x = Lib.current.stage.stageWidth/2 - endGameField.width/2;
-			endGameField.defaultTextFormat = textFormat;
-			endGameField.background = true;
-			endGameField.backgroundColor = 0x493815;
-			endGameField.border = true;
-			endGameField.text = ("RIP in Peace");
+			// make sure this arrow points in the same direction (towards the mouse)
+			enemy.enemyBitmap.rotation = rotationInRadians * 180 / Math.PI;
 			
-			stage.removeEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
-			stage.removeEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
-			
-			//player.playerBitmap.x = player.playerBitmap.y = 200;
+			// move in the direction this sprite is rotated
+			var velocity:Point = Point.polar(3, rotationInRadians);
+			enemy.enemyBitmap.x += velocity.x;
+			enemy.enemyBitmap.y += velocity.y;
+			}
+		}
+		
+		if (hit == false && spawned == true )
+		{
+			for (enemy in enemies)
+			{
+			if ((player.playerBitmap.x + player.playerBitmap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.playerBitmap.x + player.playerBitmap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
+			&& (player.playerBitmap.y + player.playerBitmap.height/2 > enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 - 50 && player.playerBitmap.y + player.playerBitmap.height/2 < enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 + 50)) 
+			{
+				hit = true;
+				
+				addChild(endGameField);
+				endGameField.width = 500;
+				endGameField.height = 85;
+				endGameField.y = Lib.current.stage.stageHeight/2 - endGameField.height/2;
+				endGameField.x = Lib.current.stage.stageWidth/2 - endGameField.width/2;
+				endGameField.defaultTextFormat = textFormat;
+				endGameField.background = true;
+				endGameField.backgroundColor = 0x493815;
+				endGameField.border = true;
+				endGameField.text = ("RIP in Peace");
+				
+				stage.removeEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
+				stage.removeEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
+			}
+			}
 		}
 	}
-
+	
+	function enemySpawning()
+	{
+		spawnTimer -= 1;
+		trace(spawnTimer);
+		if (spawnTimer == 0)
+		{
+			spawned = true;
+			var enemyWave:Int = 4;
+			for (i in 0 ... enemyWave)
+			{
+				var spawningLocationsx:Array<Float> = [0, 1248, 0, 1248];
+				var spawningLocationsy:Array<Float> = [0, 0, 688, 688];
+				
+				for (v in 0...4)
+				{
+					var enemy:Enemy = new Enemy();
+					enemy.enemyBitmap.x = spawningLocationsx[v];
+					enemy.enemyBitmap.y = spawningLocationsy[v];
+					enemies.push(enemy);
+					addChild(enemy);
+					trace("donger");
+				}
+				spawnTimer = 60;
+			}
+		}
+	}
 }

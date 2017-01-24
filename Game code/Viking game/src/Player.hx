@@ -80,11 +80,13 @@ class Player extends Sprite
 		var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
 		var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
 		
+		
 		if (playerBitmap.y >= stage.height + 80) playerBitmap.y = stage.height + 80;
 		if (playerBitmap.y <= 10) playerBitmap.y = 10;
 		if (playerBitmap.x <= 10) playerBitmap.x = 10;
 		if (playerBitmap.x >= stage.width - 60) playerBitmap.x = stage.width - 60;
-				
+		
+		
 		//Applying the velocities to the player
 		playerBitmap.y += velocity.y;	//Apply the y velocity to the player
 		checkBottomCollision(tileCoords, approximateCoords);	//Apply bottom collision

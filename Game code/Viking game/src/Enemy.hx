@@ -8,27 +8,28 @@ import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import src.Level;
+import openfl.Lib;
 
 class Enemy extends Sprite
 {
 	
-	private var gravity:Float = 1.5;
-	private var jumpHeight:Float = 15.0;
-	private var velocity:Point = new Point(0, 0); // Variable where we store the velocity to be added to the player. This is applied at the end of every frame loop.
-	private var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
-	private var isOnGround:Bool; //Are we colliding?
-	private var jumped:Bool = false; //To keep track if we're in the air from a jump
+	//private var gravity:Float = 1.5;
+	//private var jumpHeight:Float = 15.0;
+	//private var velocity:Point = new Point(0, 0); // Variable where we store the velocity to be added to the player. This is applied at the end of every frame loop.
+	//private var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
+	//private var isOnGround:Bool; //Are we colliding?
+	//private var jumped:Bool = false; //To keep track if we're in the air from a jump
 	public var enemyBitmap:Bitmap;
-	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
-	var level : Level; //Referencing the level class, so we can read from it
-	var direction : Bool = true;
+	//var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
+	//var level : Level; //Referencing the level class, so we can read from it
+	//var direction : Bool = true;
 	
 	//run once upon creation
 	public function new()
 	{
 		super();
 		
-		level = new Level(); //Reference to the level
+		//level = new Level(); //Reference to the level
 		
 		//Assigning the player's texture
 		var enemyData:BitmapData = Assets.getBitmapData( "img/SpikeDude.png" ); 
@@ -44,9 +45,9 @@ class Enemy extends Sprite
 		
 		addChild(enemyBitmap); //Adding the player sprite to the scene
 		
-		keys = []; //Defining the array we use to store the keyboard keys. It's empty because it's populated by the respective functions
+		//keys = []; //Defining the array we use to store the keyboard keys. It's empty because it's populated by the respective functions
 		
-		this.addEventListener(Event.ENTER_FRAME, everyFrame); //The game is frame based, so we're tracking things that happen every frame in the everyFrame function
+		//this.addEventListener(Event.ENTER_FRAME, everyFrame); //The game is frame based, so we're tracking things that happen every frame in the everyFrame function
 	}
 	
 	//Code that is run every frame
@@ -84,28 +85,28 @@ class Enemy extends Sprite
 			jumped = false;
 		}
 		*/
-		
+		/*
 		if (enemyBitmap.y >= stage.height + 80) enemyBitmap.y = stage.height + 80;
 		if (enemyBitmap.y <= 10) enemyBitmap.y = 10;
 		if (enemyBitmap.x <= 10) enemyBitmap.x = 10;
 		if (enemyBitmap.x >= stage.width - 60) enemyBitmap.x = stage.width - 60;
-		
-		var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
-		var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
+		*/
+		//var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
+		//var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
 		
 		//Applying the velocities to the player
-		enemyBitmap.y += velocity.y;	//Apply the y velocity to the player
+		//enemyBitmap.y += velocity.y;	//Apply the y velocity to the player
 		//checkBottomCollision(tileCoords, approximateCoords);	//Apply bottom collision
 		
-		enemyBitmap.x += velocity.x;	//Apply the x velocity to the player
+		//enemyBitmap.x += velocity.x;	//Apply the x velocity to the player
 		//checkRightCollision(tileCoords, approximateCoords);
 		//checkLeftCollision(tileCoords, approximateCoords);
 		
 		//artificialIntelligence(direction);
 		
-		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
+		//if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
 	}
-	
+	/*
 	public function artificialIntelligence(direction:Bool)
 	{//This function moves the enemy based on the input of the collision functions
 		if (direction)	//true = right
@@ -116,17 +117,17 @@ class Enemy extends Sprite
 		{
 			velocity.x = -7;
 		}
-	}
-	
+	}*/
+	/*
 	function checkTopCollision(tileCoords:Point, approximateCoords:Point):Void 
 	{//Bottom collision
 		
 		if (velocity.y <= 0) 
 		{//If we're falling
 			
-			/*Turning the player's actual coordinates to ones based on our grid
-				First half of this equasion sets the collision point as the bottom of our character.
-				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
+			//Turning the player's actual coordinates to ones based on our grid
+				//First half of this equasion sets the collision point as the bottom of our character.
+				//We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
 			approximateCoords.y = (enemyBitmap.y) / level.gridSize; 
 			approximateCoords.x = (enemyBitmap.x ) / level.gridSize; 
 			
@@ -159,9 +160,9 @@ class Enemy extends Sprite
 		if (velocity.y >= 0) 
 		{//If we're falling
 			
-			/*Turning the player's actual coordinates to ones based on our grid
-				First half of this equasion sets the collision point as the bottom of our character.
-				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
+			//Turning the player's actual coordinates to ones based on our grid
+				//First half of this equasion sets the collision point as the bottom of our character.
+				//We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
 			approximateCoords.y = (enemyBitmap.y + enemyBitmap.height / 2) / level.gridSize; 
 			approximateCoords.x = (enemyBitmap.x + enemyBitmap.width / 2 ) / level.gridSize; 
 			
@@ -194,9 +195,9 @@ class Enemy extends Sprite
 		if (velocity.x > 0) 
 		{//If we're falling
 			
-			/*Turning the player's actual coordinates to ones based on our grid
-				First half of this equasion sets the collision point as the bottom of our character.
-				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
+			//Turning the player's actual coordinates to ones based on our grid
+				//First half of this equasion sets the collision point as the bottom of our character.
+				//We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
 			approximateCoords.y = (enemyBitmap.y ) / level.gridSize; 
 			approximateCoords.x = (enemyBitmap.x + enemyBitmap.width - 5) / level.gridSize; 
 			
@@ -232,10 +233,10 @@ class Enemy extends Sprite
 		if (velocity.x <= 0) 
 		{//If we're moving left
 			
-			/*Turning the player's actual coordinates to ones based on our grid
-				First half of this equasion sets the collision point as the bottom of our character.
-				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
-				*/
+			//Turning the player's actual coordinates to ones based on our grid
+			//	First half of this equasion sets the collision point as the bottom of our character.
+				//We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
+				
 			approximateCoords.y = (enemyBitmap.y) / level.gridSize; 
 			approximateCoords.x = (enemyBitmap.x) / level.gridSize; 
 			
@@ -292,4 +293,5 @@ class Enemy extends Sprite
 		canSpacebar = true;
 		
 	}
+	*/
 }
