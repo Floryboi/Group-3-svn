@@ -76,6 +76,20 @@ class Level extends Sprite
 					
 					blocks.addChild(blockBitmap);
 				}
+				
+				if (map[row][coll] == 0)
+				{ //If the value of the current location is 0
+					var blockData:BitmapData = Assets.getBitmapData( "img/snow.png" );
+					
+					blockBitmap = new Bitmap( blockData );
+					blockBitmap.scaleX = blockBitmap.scaleY = 2;
+					
+					//Placing it on the correct spot on the screen based on the grid size
+					blockBitmap.x = coll * gridSize;
+					blockBitmap.y = row * gridSize;
+					
+					blocks.addChild(blockBitmap);
+				}
 			}
 		}
 		addChild(blocks); //Finally, adding the container with all the bitmaps which is displayed on the screen.
