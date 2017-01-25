@@ -14,8 +14,8 @@ class Player extends Sprite
 	var slowdown: Float = .5;
 	var speed : Float = 2;
 	private var jumpHeight:Float = 15.0;
-	private var velocity:Point = new Point(0, 0); // Variable where we store the velocity to be added to the player. This is applied at the end of every frame loop.
-	private var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
+	public var velocity:Point = new Point(0, 0); // Variable where we store the velocity to be added to the player. This is applied at the end of every frame loop.
+	public var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
 	private var isOnGround:Bool; //Are we colliding?
 	private var jumped:Bool = false; //To keep track if we're in the air from a jump
 	public var playerBitmap:Bitmap;

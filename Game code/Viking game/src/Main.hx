@@ -4,6 +4,8 @@ import flash.events.Event;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
+import openfl.Assets;
 import openfl.display.Sprite;
 import openfl.Lib;
 import src.Player;
@@ -16,13 +18,14 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 
-
 class Main extends Sprite 
 {
 	
 	var player:Player;
 	var level:Level;
 	
+	var restartButtonData:BitmapData = Assets.getBitmapData( "img/restart.png" );
+	var restartButton:Button;
 	var textFormat:TextFormat = new TextFormat("Tahoma", 72, 4967498, true);
 	var endGameField = new TextField();
 	
@@ -30,7 +33,7 @@ class Main extends Sprite
 	var spawned:Bool = false;
 	
 	var spawnTimer:Int = 60;
-	var enemies:Array<Enemy> = new Array<Enemy>();
+	var enemies:Array<Enemy>;
 	
 	public function new() 
 	{
@@ -38,20 +41,31 @@ class Main extends Sprite
 		
 		textFormat.align = TextFormatAlign.CENTER;
 		
-		//Adding the player
 		player = new Player();
 		addChild(player);
+		
+		level = new Level();
+		addChild(level);
+		
+		newGame();
+	}
+	
+	function newGame()
+	{		
+		spawnTimer = 60;
+		spawned = false;
+		hit = false;
+		enemies = new Array<Enemy>();
+		
+		//Adding the player
+		
 		player.playerBitmap.x = 640;
 		player.playerBitmap.y = 360;
 		
 		//Adding an enemy
 		var enemy = new Enemy();
 		addChild(enemy);
-		enemy.x = enemy.y = -2000;
-		
-		//Displaying the level
-		level = new Level();
-		addChild(level);
+		enemy.x = enemy.y = -2000;		
 		
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
 		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
@@ -67,20 +81,21 @@ class Main extends Sprite
 		{
 			for (enemy in enemies)
 			{
-			var rotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
-			
-			// make sure this arrow points in the same direction (towards the mouse)
-			enemy.enemyBitmap.rotation = rotationInRadians * 180 / Math.PI;
-			
-			// move in the direction this sprite is rotated
-			var velocity:Point = Point.polar(3, rotationInRadians);
-			enemy.enemyBitmap.x += velocity.x;
-			enemy.enemyBitmap.y += velocity.y;
+				var rotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
+				
+				// make sure this arrow points in the same direction (towards the mouse)
+				enemy.enemyBitmap.rotation = rotationInRadians * 180 / Math.PI;
+				
+				// move in the direction this sprite is rotated
+				var velocity:Point = Point.polar(3, rotationInRadians);
+				enemy.enemyBitmap.x += velocity.x;
+				enemy.enemyBitmap.y += velocity.y;
 			}
 		}
 		
 		if (hit == false && spawned == true )
 		{
+			//Check if any enemy collides with the player
 			for (enemy in enemies)
 			{
 				if ((player.playerBitmap.x + player.playerBitmap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.playerBitmap.x + player.playerBitmap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
@@ -91,7 +106,7 @@ class Main extends Sprite
 					addChild(endGameField);
 					endGameField.width = 500;
 					endGameField.height = 85;
-					endGameField.y = Lib.current.stage.stageHeight/2 - endGameField.height/2;
+					endGameField.y = Lib.current.stage.stageHeight / 2 - endGameField.height * 2;
 					endGameField.x = Lib.current.stage.stageWidth/2 - endGameField.width/2;
 					endGameField.defaultTextFormat = textFormat;
 					endGameField.background = true;
@@ -99,8 +114,21 @@ class Main extends Sprite
 					endGameField.border = true;
 					endGameField.text = ("RIP in Peace");
 					
+					//This fixes the player floating off in nothingness
+					player.keys = [];
+					
 					stage.removeEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
 					stage.removeEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
+					stage.removeEventListener(Event.ENTER_FRAME, everyFrame);
+					
+					//Removing all the enemies
+					for (enemy in enemies) removeChild(enemy);
+					
+					restartButton  = new Button(restartButtonData);
+					restartButton.x = Lib.current.stage.stageWidth/2 - (restartButton.width/2);
+					restartButton.y = Lib.current.stage.stageHeight/2 - (restartButton.height/2);
+					restartButton.addEventListener(MouseEvent.CLICK, restartClicked);
+					addChild(restartButton);
 				}
 			}
 		}
@@ -151,5 +179,12 @@ class Main extends Sprite
 				}
 			}
 		}
+	}
+	
+	private function restartClicked(evt:Event):Void
+	{
+		removeChild(restartButton);
+		removeChild(endGameField);
+		newGame();
 	}
 }
