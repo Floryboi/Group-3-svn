@@ -14,7 +14,7 @@ class Level extends Sprite
 	public var gridSize:Int; //The pixel size of one block
 	var blocks:Sprite; //The sprite container that's storing the whole level
 	var blockBitmap:Bitmap;
-		
+	
 	public function new() 
 	{
 		super();
