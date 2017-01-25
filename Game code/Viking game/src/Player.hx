@@ -4,10 +4,13 @@ import openfl.Assets;
 import openfl.display.Sprite;
 import flash.events.Event;
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import src.Level;
+import src.Ability;
+import openfl.Lib;
 
 class Player extends Sprite
 {
@@ -22,6 +25,8 @@ class Player extends Sprite
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
 	//var enemy : Enemy;
+	
+	var timer : Int = 0;
 	
 	//run once upon creation
 	public function new()
@@ -50,19 +55,19 @@ class Player extends Sprite
 	{		
 		
 		//Movement
-		if (keys[39]) //Moving Right
+		if (keys[68]) //Moving Right
 		{
 			if (velocity.x < 7) velocity.x += speed; //Movement speed
 		}
-		if (keys[37]) //Moving Left
+		if (keys[65]) //Moving Left
 		{
 			if (velocity.x > -7) velocity.x -= speed; //Movement speed
 		}
-		if (keys[40]) //Moving Down
+		if (keys[83]) //Moving Down
 		{
 			if (velocity.y < 7) velocity.y += speed; //Movement speed
 		}
-		if (keys[38]) //Moving Up
+		if (keys[87]) //Moving Up
 		{
 			if (velocity.y > -7) velocity.y -= speed; //Movement speed
 		}
@@ -95,7 +100,12 @@ class Player extends Sprite
 		checkLeftCollision(tileCoords, approximateCoords);
 		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
+		
+
 	}
+	
+
+	
 	
 	function checkBottomCollision(tileCoords:Point, approximateCoords:Point):Void 
 	{//Bottom collision

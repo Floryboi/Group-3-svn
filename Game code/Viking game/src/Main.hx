@@ -11,6 +11,8 @@ import openfl.Lib;
 import src.Player;
 import src.Level;
 import src.Enemy;
+import src.Ability;
+
 
 import openfl.geom.Point;
 
@@ -35,9 +37,19 @@ class Main extends Sprite
 	var spawnTimer:Int = 60;
 	var enemies:Array<Enemy>;
 	
+	var ability : Ability; 
+	public var abilitied : Bool = false;  //A check for making abilities work
+	public var clicked : Bool = true;     //A-nother check for making abilities work
+	//public var abilitySpeed : Point = new Point(0, 0);
+	public var rotationInRadians = Math.atan2( 0, 0 );
+	var abilities : Array<Ability> = [];
+	public var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
+	
 	public function new() 
 	{
 		super();
+		
+		keys = [];
 		
 		textFormat.align = TextFormatAlign.CENTER;
 		
@@ -70,6 +82,11 @@ class Main extends Sprite
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
 		stage.addEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
 		
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown); 
+		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		
+		stage.addEventListener(MouseEvent.CLICK, abil);
+		
 		stage.addEventListener(Event.ENTER_FRAME, everyFrame);
 	}
 	
@@ -81,18 +98,22 @@ class Main extends Sprite
 		{
 			for (enemy in enemies)
 			{
+				var enemyRotationSpeed = .5;
 				var rotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
 				
 				// make sure this arrow points in the same direction (towards the mouse)
-				enemy.enemyBitmap.rotation = rotationInRadians * 180 / Math.PI;
+				var rotationInDegrees = rotationInRadians * 180 / Math.PI;
+				
+				if (enemy.enemyBitmap.rotation < rotationInDegrees) enemy.enemyBitmap.rotation += enemyRotationSpeed;
+				if (enemy.enemyBitmap.rotation > rotationInDegrees)  enemy.enemyBitmap.rotation -= enemyRotationSpeed;
 				
 				// move in the direction this sprite is rotated
-				var velocity:Point = Point.polar(3, rotationInRadians);
+				var velocity:Point = Point.polar(2, rotationInRadians);
 				enemy.enemyBitmap.x += velocity.x;
 				enemy.enemyBitmap.y += velocity.y;
 			}
 		}
-		
+		/*
 		if (hit == false && spawned == true )
 		{
 			//Check if any enemy collides with the player
@@ -131,7 +152,70 @@ class Main extends Sprite
 					addChild(restartButton);
 				}
 			}
+		}*/
+		for (enemy in enemies)
+		{
+			for (ability in abilities)
+			{
+				//if ((ability.x + ability.width / 2 > player.playerBitmap.x + player.playerBitmap.width / 2 - 25 && ability.x + ability.width / 2 < player.playerBitmap.x + player.playerBitmap.width / 2 + 25)
+				//&& (ability.y + ability.height/2 > player.playerBitmap.y + player.playerBitmap.height/2 
+				if ((enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 > ability.x + ability.width/2 - 30 && enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 < ability.x + ability.width/2 + 30)
+				&& (enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 > ability.y + ability.height/2 - 30 && enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 < ability.y + ability.height/2 + 30)) 
+				{
+					enemies.remove(enemy);
+					removeChild(enemy);
+					abilities.remove(ability);
+					removeChild(ability);
+				}
+			}
 		}
+		
+		//Managing abilities
+		
+		if (keys[81])  //Pressing Q button
+		{
+			if (clicked)
+			{
+			ability = new Ability();  //Adding the ability to the screen
+			addChild(ability);
+			abilities.push(ability);
+			abilitied = true;
+			clicked = false;
+			}
+		}
+		
+		if (abilitied && !clicked)
+		{
+			ability.x = player.playerBitmap.x+32;  //Putting the ability sprite on the player
+			ability.y = player.playerBitmap.y+36;
+		} 
+		
+		if (abilitied && clicked)
+		{
+			ability.rotation = rotationInRadians * 180 / Math.PI;   //Rotating the ability in sprite in the right direction
+			
+			ability.velocity = Point.polar(10, rotationInRadians);    //Sets the thingy to move
+			if (ability.x > 1300 || ability.y > 750  || ability.x  <0 || ability.y < 0)
+			{
+				removeChild(ability);
+			}
+		} 
+		
+		for (a in abilities)
+		{
+			a.x += a.velocity.x;
+			a.y += a.velocity.y;
+		}
+	}
+	
+	public function abil(Event: MouseEvent)
+	{
+		if (abilitied && !clicked)
+		{
+			var target : Point = new Point(0, 0);
+			rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );  //Gets the direction of the mouse click   
+		}
+		clicked = true;
 	}
 	
 	function enemySpawning()
@@ -186,5 +270,16 @@ class Main extends Sprite
 		removeChild(restartButton);
 		removeChild(endGameField);
 		newGame();
+	}
+		
+	public function onKeyDown(evt:KeyboardEvent):Void
+	{
+		
+		keys[evt.keyCode] = true;
+	}
+	
+	public function onKeyUp(evt:KeyboardEvent):Void
+	{
+		keys[evt.keyCode] = false;
 	}
 }
