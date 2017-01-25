@@ -41,11 +41,11 @@ class Main extends Sprite
 		
 		textFormat.align = TextFormatAlign.CENTER;
 		
-		player = new Player();
-		addChild(player);
-		
 		level = new Level();
 		addChild(level);
+		
+		player = new Player();
+		addChild(player);
 		
 		newGame();
 	}
