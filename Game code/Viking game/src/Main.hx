@@ -78,7 +78,7 @@ class Main extends Sprite
 			enemy.enemyBitmap.y += velocity.y;
 			}
 		}
-		/*
+		
 		if (hit == false && spawned == true )
 		{
 			for (enemy in enemies)
@@ -103,42 +103,47 @@ class Main extends Sprite
 					stage.removeEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
 				}
 			}
-		}*/
+		}
 	}
 	
 	function enemySpawning()
 	{
+		//So they don't spawn infinitely. To be replaced with a wave counter
 		if (enemies.length < 10)
 		{
+			//Count down each frame until we get to the spawn point
 			spawnTimer -= 1;
-			//trace(spawnTimer);
 			
 			if (spawnTimer == 0)
 			{
 				spawned = true;
 				
+				//How many times will we spawn this wave
 				var enemyWave:Int = 4;
 				
 				for (i in 0 ... enemyWave)
 				{
-					var spawningLocationsx:Array<Float> = [0, 1300, 0, 1300];
-					var spawningLocationsy:Array<Float> = [0, 0, 750, 750];
+					//Generating random coordinates
+					var randX:Int = Math.floor(Math.random() * 1300);
+					var randY:Int = Math.floor(Math.random() * 750);
 					
-					var randx:Int = Math.floor(Math.random() * 1300);
-					var randy:Int = Math.floor(Math.random() * 750);
-					
-					if (randx < 1300 && randx > -10 && randy < 750 && randy > -10)
+					//If the coordinate is on the screen
+					if (randX < 1300 && randX > -10 && randY < 750 && randY > -10)
 					{
+						//We randomly decide whether we overwrite the X or the Y to be outside the screen.
+						//This way it's still random, but only one coordinate at a time, so we can be sure it's outside the screen.
 						var randSmooth : Int = Math.floor(Math.random() * 4);
-						if (randSmooth == 1) randy = -30;
-						if (randSmooth == 0) randx = -30;
-						if (randSmooth == 2) randx = 1300;
-						if (randSmooth == 3) randy = 730;
+						
+						if (randSmooth == 1) randY = -30;
+						if (randSmooth == 0) randX = -30;
+						if (randSmooth == 2) randX = 1300;
+						if (randSmooth == 3) randY = 730;
 					}
 					
+					//Spawn enemy, possition add, reset timer
 					var enemy:Enemy = new Enemy();
-					enemy.enemyBitmap.x = randx;
-					enemy.enemyBitmap.y = randy;
+					enemy.enemyBitmap.x = randX;
+					enemy.enemyBitmap.y = randY;
 					enemies.push(enemy);
 					addChild(enemy);
 					
