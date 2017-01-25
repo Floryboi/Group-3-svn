@@ -29,21 +29,28 @@ class Main extends Sprite
 	var restartButtonData:BitmapData = Assets.getBitmapData( "img/restart.png" );
 	var restartButton:Button;
 	var textFormat:TextFormat = new TextFormat("Tahoma", 72, 4967498, true);
+	var scoreTextFormat:TextFormat = new TextFormat("Verdana", 36, 495614, true);
 	var endGameField = new TextField();
 	
 	var hit:Bool = false;
 	var spawned:Bool = false;
 	
 	var spawnTimer:Int = 60;
+	var abilityTimer:Int = 30;
+	var timer:Int = 0;
+	
 	var enemies:Array<Enemy>;
 	
 	var ability : Ability; 
 	public var abilitied : Bool = false;  //A check for making abilities work
 	public var clicked : Bool = true;     //A-nother check for making abilities work
-	//public var abilitySpeed : Point = new Point(0, 0);
 	public var rotationInRadians = Math.atan2( 0, 0 );
 	var abilities : Array<Ability> = [];
 	public var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
+	var score:Int = 0;
+	var scoreField:TextField = new TextField();
+	var timerField:TextField = new TextField();
+	var canFireQ:Bool = true;
 	
 	public function new() 
 	{
@@ -52,9 +59,30 @@ class Main extends Sprite
 		keys = [];
 		
 		textFormat.align = TextFormatAlign.CENTER;
+		scoreTextFormat.align = TextFormatAlign.CENTER;
 		
 		level = new Level();
 		addChild(level);
+		
+		addChild(scoreField);
+		scoreField.width = 350;
+		scoreField.height = 50;
+		scoreField.y = 10;
+		scoreField.x = Lib.current.stage.stageWidth/2 - scoreField.width/2;
+		scoreField.defaultTextFormat = scoreTextFormat;
+		scoreField.background = true;
+		scoreField.selectable = false;
+		scoreField.backgroundColor = 0x058255;
+		scoreField.border = true;
+		
+		addChild(timerField);
+		timerField.width = 400;
+		timerField.height = 50;
+		timerField.y = Lib.current.stage.stageHeight - timerField.height - 10;
+		timerField.x = Lib.current.stage.stageWidth/2 - timerField.width/2;
+		timerField.defaultTextFormat = scoreTextFormat;
+		timerField.selectable = false;
+		timerField.border = true;
 		
 		player = new Player();
 		addChild(player);
@@ -92,23 +120,37 @@ class Main extends Sprite
 	
 	function everyFrame(evt:Event):Void
 	{
-		enemySpawning();
+		//enemySpawning();
+		
+		timer++;
+		var timerSeconds = Math.floor(timer / 60);
+		
+		scoreField.text = ("Your power level is " + score);
+		timerField.text = ("You've been alive for " + timer);
+		
+		abilityTimer--;
+		
+		if (abilityTimer < 0)
+		{
+			abilityTimer = 0;
+		}
+		
 		
 		if (hit == false && spawned == true)
 		{
 			for (enemy in enemies)
 			{
 				var enemyRotationSpeed = .5;
-				var rotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
+				var enemyRotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
 				
 				// make sure this arrow points in the same direction (towards the mouse)
-				var rotationInDegrees = rotationInRadians * 180 / Math.PI;
+				var enemyRotationInDegrees = enemyRotationInRadians * 180 / Math.PI;
 				
-				if (enemy.enemyBitmap.rotation < rotationInDegrees) enemy.enemyBitmap.rotation += enemyRotationSpeed;
-				if (enemy.enemyBitmap.rotation > rotationInDegrees)  enemy.enemyBitmap.rotation -= enemyRotationSpeed;
+				if (enemy.enemyBitmap.rotation < enemyRotationInDegrees) enemy.enemyBitmap.rotation += enemyRotationSpeed;
+				if (enemy.enemyBitmap.rotation > enemyRotationInDegrees)  enemy.enemyBitmap.rotation -= enemyRotationSpeed;
 				
 				// move in the direction this sprite is rotated
-				var velocity:Point = Point.polar(2, rotationInRadians);
+				var velocity:Point = Point.polar(2, enemyRotationInRadians);
 				enemy.enemyBitmap.x += velocity.x;
 				enemy.enemyBitmap.y += velocity.y;
 			}
@@ -133,7 +175,7 @@ class Main extends Sprite
 					endGameField.background = true;
 					endGameField.backgroundColor = 0x493815;
 					endGameField.border = true;
-					endGameField.text = ("RIP in Peace");
+					endGameField.text = ("Off to Valhalla");
 					
 					//This fixes the player floating off in nothingness
 					player.keys = [];
@@ -157,11 +199,10 @@ class Main extends Sprite
 		{
 			for (ability in abilities)
 			{
-				//if ((ability.x + ability.width / 2 > player.playerBitmap.x + player.playerBitmap.width / 2 - 25 && ability.x + ability.width / 2 < player.playerBitmap.x + player.playerBitmap.width / 2 + 25)
-				//&& (ability.y + ability.height/2 > player.playerBitmap.y + player.playerBitmap.height/2 
 				if ((enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 > ability.x + ability.width/2 - 30 && enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 < ability.x + ability.width/2 + 30)
 				&& (enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 > ability.y + ability.height/2 - 30 && enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 < ability.y + ability.height/2 + 30)) 
 				{
+					score++;
 					enemies.remove(enemy);
 					removeChild(enemy);
 					abilities.remove(ability);
@@ -172,33 +213,42 @@ class Main extends Sprite
 		
 		//Managing abilities
 		
-		if (keys[81])  //Pressing Q button
+		for (ability in abilities)
 		{
-			if (clicked)
-			{
-			ability = new Ability();  //Adding the ability to the screen
-			addChild(ability);
-			abilities.push(ability);
-			abilitied = true;
-			clicked = false;
-			}
-		}
-		
-		if (abilitied && !clicked)
-		{
-			ability.x = player.playerBitmap.x+32;  //Putting the ability sprite on the player
-			ability.y = player.playerBitmap.y+36;
-		} 
-		
-		if (abilitied && clicked)
-		{
-			ability.rotation = rotationInRadians * 180 / Math.PI;   //Rotating the ability in sprite in the right direction
-			
-			ability.velocity = Point.polar(10, rotationInRadians);    //Sets the thingy to move
-			if (ability.x > 1300 || ability.y > 750  || ability.x  <0 || ability.y < 0)
+			if (ability.x > 1300 || ability.y > 750  || ability.x  < 0 || ability.y < 0)
 			{
 				removeChild(ability);
 			}
+		}
+		
+		if (keys[81])  //Pressing Q button
+		{
+			canFireQ = true;
+		}
+		 /*
+		if (canFireQ && !clicked)
+		{
+			ability.x = player.playerBitmap.x + 32;  //Putting the ability sprite on the player
+			ability.y = player.playerBitmap.y + 36;
+		} */
+		
+		if (canFireQ && clicked)
+		{
+			ability = new Ability();  //Adding the ability to the screen
+			addChild(ability);
+			abilities.push(ability);
+			
+			ability.x = player.playerBitmap.x + 32;  //Putting the ability sprite on the player
+			ability.y = player.playerBitmap.y + 36;
+			
+			ability.rotation = rotationInRadians * 180 / Math.PI;   //Rotating the ability in sprite in the right direction
+			
+			ability.velocity = Point.polar(10, rotationInRadians);    //Sets the thingy to move
+			
+			
+			abilityTimer = 60;
+			clicked = canFireQ = false;
+			keys[81] = false;
 		} 
 		
 		for (a in abilities)
@@ -210,12 +260,8 @@ class Main extends Sprite
 	
 	public function abil(Event: MouseEvent)
 	{
-		if (abilitied && !clicked)
-		{
-			var target : Point = new Point(0, 0);
-			rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );  //Gets the direction of the mouse click   
-		}
-		clicked = true;
+			var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );  //Gets the direction of the mouse click   
+			clicked = true;
 	}
 	
 	function enemySpawning()
