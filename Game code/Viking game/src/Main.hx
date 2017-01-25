@@ -21,7 +21,6 @@ class Main extends Sprite
 {
 	
 	var player:Player;
-	//var enemy:Enemy;
 	var level:Level;
 	
 	var textFormat:TextFormat = new TextFormat("Tahoma", 72, 4967498, true);
@@ -42,10 +41,13 @@ class Main extends Sprite
 		//Adding the player
 		player = new Player();
 		addChild(player);
+		player.playerBitmap.x = 640;
+		player.playerBitmap.y = 360;
 		
-		//Adding the player
+		//Adding an enemy
 		var enemy = new Enemy();
 		addChild(enemy);
+		enemy.x = enemy.y = -2000;
 		
 		//Displaying the level
 		level = new Level();
@@ -76,59 +78,73 @@ class Main extends Sprite
 			enemy.enemyBitmap.y += velocity.y;
 			}
 		}
-		
+		/*
 		if (hit == false && spawned == true )
 		{
 			for (enemy in enemies)
 			{
-			if ((player.playerBitmap.x + player.playerBitmap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.playerBitmap.x + player.playerBitmap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
-			&& (player.playerBitmap.y + player.playerBitmap.height/2 > enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 - 50 && player.playerBitmap.y + player.playerBitmap.height/2 < enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 + 50)) 
-			{
-				hit = true;
-				
-				addChild(endGameField);
-				endGameField.width = 500;
-				endGameField.height = 85;
-				endGameField.y = Lib.current.stage.stageHeight/2 - endGameField.height/2;
-				endGameField.x = Lib.current.stage.stageWidth/2 - endGameField.width/2;
-				endGameField.defaultTextFormat = textFormat;
-				endGameField.background = true;
-				endGameField.backgroundColor = 0x493815;
-				endGameField.border = true;
-				endGameField.text = ("RIP in Peace");
-				
-				stage.removeEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
-				stage.removeEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
+				if ((player.playerBitmap.x + player.playerBitmap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.playerBitmap.x + player.playerBitmap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
+				&& (player.playerBitmap.y + player.playerBitmap.height/2 > enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 - 50 && player.playerBitmap.y + player.playerBitmap.height/2 < enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 + 50)) 
+				{
+					hit = true;
+					
+					addChild(endGameField);
+					endGameField.width = 500;
+					endGameField.height = 85;
+					endGameField.y = Lib.current.stage.stageHeight/2 - endGameField.height/2;
+					endGameField.x = Lib.current.stage.stageWidth/2 - endGameField.width/2;
+					endGameField.defaultTextFormat = textFormat;
+					endGameField.background = true;
+					endGameField.backgroundColor = 0x493815;
+					endGameField.border = true;
+					endGameField.text = ("RIP in Peace");
+					
+					stage.removeEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
+					stage.removeEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
+				}
 			}
-			}
-		}
+		}*/
 	}
 	
 	function enemySpawning()
 	{
-		spawnTimer -= 1;
-		trace(spawnTimer);
-		if (spawnTimer == 0)
+		if (enemies.length < 10)
 		{
-			spawned = true;
-			var enemyWave:Int = 4;
-			for (i in 0 ... enemyWave)
+			spawnTimer -= 1;
+			//trace(spawnTimer);
+			
+			if (spawnTimer == 0)
 			{
-				var spawningLocationsx:Array<Float> = [0, 1248, 0, 1248];
-				var spawningLocationsy:Array<Float> = [0, 0, 688, 688];
+				spawned = true;
 				
-				for (v in 0...4)
+				var enemyWave:Int = 4;
+				
+				for (i in 0 ... enemyWave)
 				{
+					var spawningLocationsx:Array<Float> = [0, 1300, 0, 1300];
+					var spawningLocationsy:Array<Float> = [0, 0, 750, 750];
+					
+					var randx:Int = Math.floor(Math.random() * 1300);
+					var randy:Int = Math.floor(Math.random() * 750);
+					
+					if (randx < 1300 && randx > -10 && randy < 750 && randy > -10)
+					{
+						var randSmooth : Int = Math.floor(Math.random() * 4);
+						if (randSmooth == 1) randy = -30;
+						if (randSmooth == 0) randx = -30;
+						if (randSmooth == 2) randx = 1300;
+						if (randSmooth == 3) randy = 730;
+					}
+					
 					var enemy:Enemy = new Enemy();
-					enemy.enemyBitmap.x = spawningLocationsx[v];
-					enemy.enemyBitmap.y = spawningLocationsy[v];
+					enemy.enemyBitmap.x = randx;
+					enemy.enemyBitmap.y = randy;
 					enemies.push(enemy);
 					addChild(enemy);
-					trace("donger");
+					
+					spawnTimer = 60;
 				}
-				spawnTimer = 60;
 			}
 		}
 	}
 }
-//bork

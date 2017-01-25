@@ -21,7 +21,7 @@ class Player extends Sprite
 	public var playerBitmap:Bitmap;
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
-	var enemy : Enemy;
+	//var enemy : Enemy;
 	
 	//run once upon creation
 	public function new()
@@ -33,8 +33,6 @@ class Player extends Sprite
 		//Assigning the player's texture
 		var playerData:BitmapData = Assets.getBitmapData( "img/VikingGood.png" ); 
     	playerBitmap = new Bitmap( playerData );
-		
-		playerBitmap.x = playerBitmap.y = 100;
 		
 		//We don't have to do this, but he looks much better. Draws the focus to him instead of the ground or background
 		playerBitmap.scaleX = 2;

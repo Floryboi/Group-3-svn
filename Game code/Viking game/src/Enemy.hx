@@ -2,13 +2,13 @@ package src;
 
 import openfl.Assets;
 import openfl.display.Sprite;
-import flash.events.Event;
-import openfl.events.KeyboardEvent;
-import openfl.geom.Point;
+import openfl.events.Event;
+//import openfl.events.KeyboardEvent;
+//import openfl.geom.Point;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
-import src.Level;
-import openfl.Lib;
+//import src.Level;
+//import openfl.Lib;
 
 class Enemy extends Sprite
 {
@@ -49,7 +49,7 @@ class Enemy extends Sprite
 		
 		//this.addEventListener(Event.ENTER_FRAME, everyFrame); //The game is frame based, so we're tracking things that happen every frame in the everyFrame function
 	}
-	
+	/*
 	//Code that is run every frame
 	function everyFrame(evt:Event):Void
 	{
@@ -84,13 +84,13 @@ class Enemy extends Sprite
 		{
 			jumped = false;
 		}
-		*/
-		/*
+		
+		
 		if (enemyBitmap.y >= stage.height + 80) enemyBitmap.y = stage.height + 80;
 		if (enemyBitmap.y <= 10) enemyBitmap.y = 10;
 		if (enemyBitmap.x <= 10) enemyBitmap.x = 10;
 		if (enemyBitmap.x >= stage.width - 60) enemyBitmap.x = stage.width - 60;
-		*/
+		
 		//var tileCoords:Point = new Point(0, 0); //Where the tile we're moving into is located based on the grid
 		//var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
 		
@@ -105,7 +105,7 @@ class Enemy extends Sprite
 		//artificialIntelligence(direction);
 		
 		//if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
-	}
+	}*/
 	/*
 	public function artificialIntelligence(direction:Bool)
 	{//This function moves the enemy based on the input of the collision functions
