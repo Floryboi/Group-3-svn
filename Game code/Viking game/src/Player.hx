@@ -103,7 +103,7 @@ class Player extends Sprite
 		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
 		
-		
+		//Managing abilities
 		
 		if (keys[81])  //Pressing Q button
 		{
