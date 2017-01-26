@@ -78,7 +78,7 @@ class Main extends Sprite
 		scoreField.border = true;
 		
 		addChild(timerField);
-		timerField.width = 400;
+		timerField.width = 500;
 		timerField.height = 50;
 		timerField.y = Lib.current.stage.stageHeight - timerField.height - 10;
 		timerField.x = Lib.current.stage.stageWidth/2 - timerField.width/2;
@@ -124,50 +124,54 @@ class Main extends Sprite
 	{
 		enemySpawning();
 		
+		// Iterating the timer and converting it to seconds
 		timer++;
 		var timerSeconds = Math.floor(timer / 60);
 		
+		// Updating the UI every frame
 		scoreField.text = ("Your power level is " + score);
-		timerField.text = ("You've been alive for " + timerSeconds);
+		timerField.text = ("You've been alive for " + timerSeconds + " seconds");
 		
+		// Counting down
 		abilityTimer--;
 		
+		// So the timer doesn't go under 0
 		if (abilityTimer < 0)
 		{
 			abilityTimer = 0;
 		}
 		
-		
-		if (hit == false && spawned == true)
-		{
-			for (enemy in enemies)
-			{
-				var enemyRotationSpeed = .5;
-				var enemyRotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
-				
-				// make sure this arrow points in the same direction (towards the mouse)
-				var enemyRotationInDegrees = enemyRotationInRadians * 180 / Math.PI;
-				
-				if (enemy.enemyBitmap.rotation < enemyRotationInDegrees) enemy.enemyBitmap.rotation += enemyRotationSpeed;
-				if (enemy.enemyBitmap.rotation > enemyRotationInDegrees)  enemy.enemyBitmap.rotation -= enemyRotationSpeed;
-				
-				// move in the direction this sprite is rotated
-				var velocity:Point = Point.polar(2, enemyRotationInRadians);
-				enemy.enemyBitmap.x += velocity.x;
-				enemy.enemyBitmap.y += velocity.y;
-			}
-		}
-		/*
 		if (hit == false && spawned == true )
 		{
 			//Check if any enemy collides with the player
 			for (enemy in enemies)
 			{
+				// For the delayed rotation effect
+				var enemyRotationSpeed = .5;
+				
+				// Getting its target(the player)
+				var enemyRotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
+				
+				// Translating to a sensible unit of measure and applying the rotation with the delay
+				var enemyRotationInDegrees = enemyRotationInRadians * 180 / Math.PI;
+				if (enemy.enemyBitmap.rotation < enemyRotationInDegrees) enemy.enemyBitmap.rotation += enemyRotationSpeed;
+				if (enemy.enemyBitmap.rotation > enemyRotationInDegrees)  enemy.enemyBitmap.rotation -= enemyRotationSpeed;
+				
+				// Moving it in the direction
+				var velocity:Point = Point.polar(2, enemyRotationInRadians);
+				enemy.enemyBitmap.x += velocity.x;
+				enemy.enemyBitmap.y += velocity.y;
+				
+				// Collision code if any enemy has interacted with the player
 				if ((player.playerBitmap.x + player.playerBitmap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.playerBitmap.x + player.playerBitmap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
 				&& (player.playerBitmap.y + player.playerBitmap.height/2 > enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 - 50 && player.playerBitmap.y + player.playerBitmap.height/2 < enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 + 50)) 
 				{
 					hit = true;
 					
+					timer = 0;
+					score = 0;
+					
+					// The game over text
 					addChild(endGameField);
 					endGameField.width = 500;
 					endGameField.height = 85;
@@ -182,12 +186,14 @@ class Main extends Sprite
 					//This fixes the player floating off in nothingness
 					player.keys = [];
 					
+					// No need to track any of this while we're in the restart screen
 					stage.removeEventListener(KeyboardEvent.KEY_DOWN, player.onKeyDown); 
 					stage.removeEventListener(KeyboardEvent.KEY_UP, player.onKeyUp);
 					stage.removeEventListener(Event.ENTER_FRAME, everyFrame);
 					
-					//Removing all the enemies
+					// Removing all the enemies and abilities
 					for (enemy in enemies) removeChild(enemy);
+					for (ability in abilities) removeChild(ability);
 					
 					restartButton  = new Button(restartButtonData);
 					restartButton.x = Lib.current.stage.stageWidth/2 - (restartButton.width/2);
@@ -196,14 +202,19 @@ class Main extends Sprite
 					addChild(restartButton);
 				}
 			}
-		}*/
+		}
+		
+		// Code to run for each enemy
 		for (enemy in enemies)
 		{
+			// Code to run for each ability regarding each enemy
 			for (ability in abilities)
 			{
-				if ((enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 > ability.x + ability.width/2 - 30 && enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 < ability.x + ability.width/2 + 30)
-				&& (enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 > ability.y + ability.height/2 - 30 && enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 < ability.y + ability.height/2 + 30)) 
+				// If any ability collides with any enemy
+				if ((enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 > ability.x + ability.width/2 - 45 && enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 < ability.x + ability.width/2 + 45)
+				&& (enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 > ability.y + ability.height/2 - 45 && enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 < ability.y + ability.height/2 + 45)) 
 				{
+					// Increase the score, remove the enemy and ability from the screen
 					score++;
 					enemies.remove(enemy);
 					removeChild(enemy);
@@ -213,17 +224,23 @@ class Main extends Sprite
 			}
 		}
 		
-		//Managing abilities
-		
+		// Managing abilities
+		// Code to run for every ability in the array(on the screen)
 		for (ability in abilities)
 		{
+			// Making them move
 			ability.x += ability.velocity.x;
 			ability.y += ability.velocity.y;
 			
+			// Remove if they're outside of the screen
 			if (ability.x > 1300 || ability.y > 750  || ability.x  < 0 || ability.y < 0)
 			{
+				abilities.remove(ability);
 				removeChild(ability);
 			}
+			
+			// Running the animation code in the ability class
+			ability.everyFrame();
 		}
 		
 		trace(abilityTimer);
@@ -232,6 +249,7 @@ class Main extends Sprite
 		{
 			canFireQ = true;
 		}
+		
 	}
 	
 	public function abil(Event: MouseEvent)
@@ -240,19 +258,24 @@ class Main extends Sprite
 		{
 			var ability = new Ability();
 			
-			ability.x = player.playerBitmap.x;
-			ability.y = player.playerBitmap.y;
+			// Centering its origin point
+			ability.tilemap.x = -ability.width / 2;
+			ability.tilemap.y = -ability.height / 2;
 			
-			var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
-			ability.velocity = velocity;
-			// make sure this arrow points in the same direction (towards the mouse)
-			var rotationInDegrees = rotationInRadians * 180 / Math.PI;
-			
-			// move in the direction this sprite is rotated
-			
+			// Position the ability around the player's hand
 			ability.x = player.playerBitmap.x + 32;
 			ability.y = player.playerBitmap.y + 36;
 			
+			// Telling it to go towards the mouse
+			var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
+			var velocity  = Point.polar(10, rotationInRadians);
+			ability.velocity = velocity;
+			
+			// Making the ability point towards its target
+			var rotationInDegrees = rotationInRadians * 180 / Math.PI;
+			ability.rotation = rotationInDegrees;
+			
+			// It's added to the storage array and on the screen
 			abilities.push(ability);
 			addChild(ability);
 			
