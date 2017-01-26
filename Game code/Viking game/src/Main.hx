@@ -52,6 +52,8 @@ class Main extends Sprite
 	var timerField:TextField = new TextField();
 	var canFireQ:Bool = true;
 	
+	var velocities:Array<Point>;
+	
 	public function new() 
 	{
 		super();
@@ -126,7 +128,7 @@ class Main extends Sprite
 		var timerSeconds = Math.floor(timer / 60);
 		
 		scoreField.text = ("Your power level is " + score);
-		timerField.text = ("You've been alive for " + timer);
+		timerField.text = ("You've been alive for " + timerSeconds);
 		
 		abilityTimer--;
 		
@@ -215,53 +217,38 @@ class Main extends Sprite
 		
 		for (ability in abilities)
 		{
+			ability.x += ability.velocity.x;
+			ability.y += ability.velocity.y;
+			
 			if (ability.x > 1300 || ability.y > 750  || ability.x  < 0 || ability.y < 0)
 			{
 				removeChild(ability);
 			}
 		}
-		
-		if (keys[81])  //Pressing Q button
-		{
-			canFireQ = true;
-		}
-		 /*
-		if (canFireQ && !clicked)
-		{
-			ability.x = player.playerBitmap.x + 32;  //Putting the ability sprite on the player
-			ability.y = player.playerBitmap.y + 36;
-		} */
-		
-		if (canFireQ && clicked)
-		{
-			ability = new Ability();  //Adding the ability to the screen
-			addChild(ability);
-			abilities.push(ability);
-			
-			ability.x = player.playerBitmap.x + 32;  //Putting the ability sprite on the player
-			ability.y = player.playerBitmap.y + 36;
-			
-			ability.rotation = rotationInRadians * 180 / Math.PI;   //Rotating the ability in sprite in the right direction
-			
-			ability.velocity = Point.polar(10, rotationInRadians);    //Sets the thingy to move
-			
-			
-			abilityTimer = 60;
-			clicked = canFireQ = false;
-			keys[81] = false;
-		} 
-		
-		for (a in abilities)
-		{
-			a.x += a.velocity.x;
-			a.y += a.velocity.y;
-		}
 	}
 	
 	public function abil(Event: MouseEvent)
 	{
-			var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );  //Gets the direction of the mouse click   
-			clicked = true;
+		var ability = new Ability();
+		
+		ability.x = player.playerBitmap.x;
+		ability.y = player.playerBitmap.y;
+		
+		var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
+		var velocity  = Point.polar(2, rotationInRadians);
+		ability.velocity = velocity;
+		// make sure this arrow points in the same direction (towards the mouse)
+		var rotationInDegrees = rotationInRadians * 180 / Math.PI;
+		
+		// move in the direction this sprite is rotated
+		
+		ability.x = player.playerBitmap.x + 32;
+		ability.y = player.playerBitmap.y + 36;
+		
+		abilities.push(ability);
+		addChild(ability);
+		
+		trace("click");
 	}
 	
 	function enemySpawning()

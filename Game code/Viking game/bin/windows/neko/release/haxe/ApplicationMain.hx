@@ -26,7 +26,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "946",
+			build: "972",
 			company: "Top keks",
 			file: "ProjectGame",
 			fps: 60,
