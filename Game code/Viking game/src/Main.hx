@@ -50,7 +50,7 @@ class Main extends Sprite
 	var score:Int = 0;
 	var scoreField:TextField = new TextField();
 	var timerField:TextField = new TextField();
-	var canFireQ:Bool = true;
+	var canFireQ:Bool = false;
 	
 	var velocities:Array<Point>;
 	
@@ -122,7 +122,7 @@ class Main extends Sprite
 	
 	function everyFrame(evt:Event):Void
 	{
-		//enemySpawning();
+		enemySpawning();
 		
 		timer++;
 		var timerSeconds = Math.floor(timer / 60);
@@ -225,30 +225,41 @@ class Main extends Sprite
 				removeChild(ability);
 			}
 		}
+		
+		trace(abilityTimer);
+		
+		if (keys[81] && abilityTimer == 0) 
+		{
+			canFireQ = true;
+		}
 	}
 	
 	public function abil(Event: MouseEvent)
 	{
-		var ability = new Ability();
-		
-		ability.x = player.playerBitmap.x;
-		ability.y = player.playerBitmap.y;
-		
-		var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
-		var velocity  = Point.polar(2, rotationInRadians);
-		ability.velocity = velocity;
-		// make sure this arrow points in the same direction (towards the mouse)
-		var rotationInDegrees = rotationInRadians * 180 / Math.PI;
-		
-		// move in the direction this sprite is rotated
-		
-		ability.x = player.playerBitmap.x + 32;
-		ability.y = player.playerBitmap.y + 36;
-		
-		abilities.push(ability);
-		addChild(ability);
-		
-		trace("click");
+		if (canFireQ)
+		{
+			var ability = new Ability();
+			
+			ability.x = player.playerBitmap.x;
+			ability.y = player.playerBitmap.y;
+			
+			var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
+			ability.velocity = velocity;
+			// make sure this arrow points in the same direction (towards the mouse)
+			var rotationInDegrees = rotationInRadians * 180 / Math.PI;
+			
+			// move in the direction this sprite is rotated
+			
+			ability.x = player.playerBitmap.x + 32;
+			ability.y = player.playerBitmap.y + 36;
+			
+			abilities.push(ability);
+			addChild(ability);
+			
+			canFireQ = false;
+			
+			abilityTimer = 60;
+		}
 	}
 	
 	function enemySpawning()
