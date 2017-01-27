@@ -6,11 +6,17 @@ import flash.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.geom.Point;
-import openfl.display.Bitmap;
+//import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import src.Level;
 import src.Ability;
 import openfl.Lib;
+
+import openfl.display.Tile;
+import openfl.display.Tileset;
+import openfl.display.Tilemap;
+
+import flash.geom.Rectangle;
 
 class Player extends Sprite
 {
@@ -21,13 +27,37 @@ class Player extends Sprite
 	public var keys:Array<Bool>; //Array in which we store the keyboard keys and their values for pressed or not.
 	private var isOnGround:Bool; //Are we colliding?
 	private var jumped:Bool = false; //To keep track if we're in the air from a jump
-	public var playerBitmap:Bitmap;
+	//public var tilemap:Bitmap;
 	var canSpacebar:Bool = true; //Can we press spacebar again? So we don't do the infinte hop
 	var level : Level; //Referencing the level class, so we can read from it
 	//var enemy : Enemy;
 	
 	var timer : Int = 0;
 	
+	// the TileSheet instance containing the sprite sheet
+	var tileSet:Tileset;
+
+	public var tilemap:Tilemap;
+
+	// the variable determining the frame rate of the animations
+	static inline var fps:Int = 12;
+
+	// calculates the milliseconds every frame should be visible (based on fps above)
+	var fpsPerFrame:Int = 5;
+
+	// the total amount of frames in the sprite sheet (used to define all frame rectangles)
+	static inline var frameCount:Int = 4;
+
+	// time measurement to get the proper frame rate
+	var currentDuration:Int = 0;
+	var currentFrame = 1;
+
+	// the arrays containing the frame numbers of the animations in the sprite sheet
+	var sequence:Array<Int> = [1, 2, 3, 4];
+
+	// the current animation. one of the above sequences will be referenced by this variable.
+	var currentStateFrames:Array<Int>;
+		
 	//run once upon creation
 	public function new()
 	{
@@ -36,18 +66,40 @@ class Player extends Sprite
 		level = new Level(); //Reference to the level
 		
 		//Assigning the player's texture
-		var playerData:BitmapData = Assets.getBitmapData( "img/VikingGood.png" ); 
-    	playerBitmap = new Bitmap( playerData );
+		var playerData:BitmapData = Assets.getBitmapData( "img/vikingWalk.png" ); 
+    	tileSet = new Tileset( playerData );
 		
-		//We don't have to do this, but he looks much better. Draws the focus to him instead of the ground or background
-		playerBitmap.scaleX = 2;
-		playerBitmap.scaleY = 2;
+		tilemap = new Tilemap( 64, 64, tileSet );
 		
-		addChild(playerBitmap); //Adding the player sprite to the scene
+		initializeSpriteSheet();
+		
+		tilemap.addTile( new Tile( 1 ) );
+			
+		addChild( tilemap );
+		
+		currentStateFrames = sequence;
 		
 		keys = []; //Defining the array we use to store the keyboard keys. It's empty because it's populated by the respective functions
 		
 		this.addEventListener(Event.ENTER_FRAME, everyFrame); //The game is frame based, so we're tracking things that happen every frame in the everyFrame function
+	}
+	
+	private function initializeSpriteSheet()
+	{
+		// this sprite sheet is a single row. Easy loop...
+		// accidentally it's a PoT (power of two) size (512x32 px here)
+		// individual frames are 32x32 px
+		for (i in -1 ... frameCount) 
+		{
+			tileSet.addRect( new Rectangle ( i * (64), 0, 64, 64 ) );
+		}
+	}
+
+	public function toggleAnimation()
+	{
+		currentStateFrames = sequence;
+		currentFrame = 0;
+		currentDuration = 0;
 	}
 	
 	//Code that is run every frame
@@ -84,24 +136,36 @@ class Player extends Sprite
 		var approximateCoords:Point = new Point(); //Where the player is located based on the level grid
 		
 		
-		if (playerBitmap.y >= stage.height + 80) playerBitmap.y = stage.height + 80;
-		if (playerBitmap.y <= 10) playerBitmap.y = 10;
-		if (playerBitmap.x <= 10) playerBitmap.x = 10;
-		if (playerBitmap.x >= stage.width - 60) playerBitmap.x = stage.width - 60;
+		if (tilemap.y >= stage.height + 80) tilemap.y = stage.height + 80;
+		if (tilemap.y <= 10) tilemap.y = 10;
+		if (tilemap.x <= 10) tilemap.x = 10;
+		if (tilemap.x >= stage.width - 60) tilemap.x = stage.width - 60;
 		
 		
 		//Applying the velocities to the player
-		playerBitmap.y += velocity.y;	//Apply the y velocity to the player
+		tilemap.y += velocity.y;	//Apply the y velocity to the player
 		checkBottomCollision(tileCoords, approximateCoords);	//Apply bottom collision
 		checkTopCollision(tileCoords, approximateCoords);
 		
-		playerBitmap.x += velocity.x;	//Apply the x velocity to the player
+		tilemap.x += velocity.x;	//Apply the x velocity to the player
 		checkRightCollision(tileCoords, approximateCoords);
 		checkLeftCollision(tileCoords, approximateCoords);
 		
 		if (velocity.y != 0) isOnGround = false; //Infinite jumping without this, since we removed the ground check in the beginning
 		
-
+		currentDuration++;
+		
+		if( currentDuration > fpsPerFrame )
+		{
+			currentDuration -= fpsPerFrame;
+			currentFrame++;
+			
+			if( currentFrame >= currentStateFrames.length ) currentFrame = 0;
+			
+			tilemap.removeTile( tilemap.getTileAt( 0 ) );
+			tilemap.addTile( new Tile( currentStateFrames[currentFrame] ) );
+		}
+		
 	}
 	
 
@@ -116,15 +180,15 @@ class Player extends Sprite
 			/*Turning the player's actual coordinates to ones based on our grid
 				First half of this equasion sets the collision point as the bottom of our character.
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
-			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2 ) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x ) / level.gridSize; 
+			approximateCoords.y = (tilemap.y + tilemap.height / 2 ) / level.gridSize; 
+			approximateCoords.x = (tilemap.x ) / level.gridSize; 
 			
 			tileCoords.y = Math.ceil(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
 			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
 			
 			if (isBlock(tileCoords)) { //If the tile we're going into is a block
-				playerBitmap.y = (tileCoords.y) * level.gridSize - playerBitmap.height; //Snap the player above the block. The weird math is to say how much above the block
+				tilemap.y = (tileCoords.y) * level.gridSize - tilemap.height; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.y = 0; //Reset the player's velocity
 				isOnGround = true;			
@@ -135,7 +199,7 @@ class Player extends Sprite
 			tileCoords.x = Math.ceil(approximateCoords.x);
 			
 			if (isBlock(tileCoords)) {
-				playerBitmap.y = (tileCoords.y ) * level.gridSize - playerBitmap.height;
+				tilemap.y = (tileCoords.y ) * level.gridSize - tilemap.height;
 				velocity.y = 0;
 				isOnGround = true;
 			} 
@@ -151,15 +215,15 @@ class Player extends Sprite
 			/*Turning the player's actual coordinates to ones based on our grid
 				First half of this equasion sets the collision point as the bottom of our character.
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
-			approximateCoords.y = (playerBitmap.y) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x ) / level.gridSize; 
+			approximateCoords.y = (tilemap.y) / level.gridSize; 
+			approximateCoords.x = (tilemap.x ) / level.gridSize; 
 			
 			tileCoords.y = Math.floor(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
 			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
 			
 			if (isBlock(tileCoords)) { //If the tile we're going into is a block
-				playerBitmap.y = (tileCoords.y) * level.gridSize + playerBitmap.height/2; //Snap the player above the block. The weird math is to say how much above the block
+				tilemap.y = (tileCoords.y) * level.gridSize + tilemap.height/2; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.y = 0; //Reset the player's velocity
 				isOnGround = true;			
@@ -170,7 +234,7 @@ class Player extends Sprite
 			tileCoords.x = Math.ceil(approximateCoords.x);
 			
 			if (isBlock(tileCoords)) {
-				playerBitmap.y = (tileCoords.y ) * level.gridSize + playerBitmap.height/2;
+				tilemap.y = (tileCoords.y ) * level.gridSize + tilemap.height/2;
 				velocity.y = 0;
 				isOnGround = true;
 			} 
@@ -186,15 +250,15 @@ class Player extends Sprite
 			/*Turning the player's actual coordinates to ones based on our grid
 				First half of this equasion sets the collision point as the bottom of our character.
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	*/
-			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x + playerBitmap.width ) / level.gridSize; 
+			approximateCoords.y = (tilemap.y + tilemap.height / 2) / level.gridSize; 
+			approximateCoords.x = (tilemap.x + tilemap.width ) / level.gridSize; 
 			
 			tileCoords.y = Math.ceil(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
 			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
 			
 			if (isBlock(tileCoords)) { //If the tile we're going into is a block
-				playerBitmap.x = (tileCoords.x) * level.gridSize - playerBitmap.width; //Snap the player above the block. The weird math is to say how much above the block
+				tilemap.x = (tileCoords.x) * level.gridSize - tilemap.width; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.x = 0; //Reset the player's velocity
 				isOnGround = true;			
@@ -205,7 +269,7 @@ class Player extends Sprite
 			tileCoords.y = Math.floor(approximateCoords.y);
 			
 			if (isBlock(tileCoords)) {
-				playerBitmap.x = (tileCoords.x) * level.gridSize - playerBitmap.width ;
+				tilemap.x = (tileCoords.x) * level.gridSize - tilemap.width ;
 				velocity.x = 0;
 				isOnGround = true;
 			} 
@@ -223,15 +287,15 @@ class Player extends Sprite
 				First half of this equasion sets the collision point as the bottom of our character.
 				We then divide it by the gridsize to turn it into a value relative to our grid, so we can compare it to the blocks later.	
 				*/
-			approximateCoords.y = (playerBitmap.y + playerBitmap.height / 2) / level.gridSize; 
-			approximateCoords.x = (playerBitmap.x - 20) / level.gridSize; 
+			approximateCoords.y = (tilemap.y + tilemap.height / 2) / level.gridSize; 
+			approximateCoords.x = (tilemap.x - 32) / level.gridSize; 
 			
 			tileCoords.y = Math.floor(approximateCoords.y); 
 			tileCoords.x = Math.floor(approximateCoords.x); 
 			//Round up, which is actually down on the screen, so the bottom of the block the player is in, which is the top of the block we're coliding with
 			
 			if (isBlock(tileCoords)) { //If the tile we're going into is a block
-				playerBitmap.x = (tileCoords.x) * level.gridSize + playerBitmap.width ; //Snap the player above the block. The weird math is to say how much above the block
+				tilemap.x = (tileCoords.x) * level.gridSize + tilemap.width ; //Snap the player above the block. The weird math is to say how much above the block
 				
 				velocity.x = 0; //Reset the player's velocity
 				isOnGround = true;			
@@ -242,7 +306,7 @@ class Player extends Sprite
 			tileCoords.y = Math.ceil(approximateCoords.y);
 			
 			if (isBlock(tileCoords)) {
-				playerBitmap.x = (tileCoords.x) * level.gridSize + playerBitmap.width ;
+				tilemap.x = (tileCoords.x) * level.gridSize + tilemap.width ;
 				velocity.x = 0;
 				isOnGround = true;
 			} 

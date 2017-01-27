@@ -36,7 +36,8 @@ class Main extends Sprite
 	var spawned:Bool = false;
 	
 	var spawnTimer:Int = 60;
-	var abilityTimer:Int = 30;
+	var abilityTimerLength:Int = 120;
+	var abilityTimer:Int = 0;
 	var timer:Int = 0;
 	
 	var enemies:Array<Enemy>;
@@ -54,9 +55,18 @@ class Main extends Sprite
 	
 	var velocities:Array<Point>;
 	
+	var runes:Array<Bitmap> = new Array<Bitmap>();
+	
+	var runeData:BitmapData = Assets.getBitmapData("img/rune.png");
+	
+	var UIbarData:BitmapData = Assets.getBitmapData("img/UIbar.png");
+	var UIbar:Bitmap;
+	
 	public function new() 
 	{
 		super();
+		
+		//abilityTimer = abilityTimerLength;
 		
 		keys = [];
 		
@@ -66,11 +76,19 @@ class Main extends Sprite
 		level = new Level();
 		addChild(level);
 		
+		UIbar = new Bitmap(UIbarData);
+		UIbar.scaleX = UIbar.scaleY = .5;
+		UIbar.y = Lib.current.stage.stageHeight - UIbar.height;
+		UIbar.x = Lib.current.stage.stageWidth/2 - UIbar.width/2;
+		addChild(UIbar);
+		
+		addRunes();
+		
 		addChild(scoreField);
 		scoreField.width = 350;
 		scoreField.height = 50;
 		scoreField.y = 10;
-		scoreField.x = Lib.current.stage.stageWidth/2 - scoreField.width/2;
+		scoreField.x = 10;
 		scoreField.defaultTextFormat = scoreTextFormat;
 		scoreField.background = true;
 		scoreField.selectable = false;
@@ -80,8 +98,10 @@ class Main extends Sprite
 		addChild(timerField);
 		timerField.width = 500;
 		timerField.height = 50;
-		timerField.y = Lib.current.stage.stageHeight - timerField.height - 10;
-		timerField.x = Lib.current.stage.stageWidth/2 - timerField.width/2;
+		timerField.y = 10;
+		timerField.x = Lib.current.stage.stageWidth - timerField.width - 10;
+		timerField.background = true;
+		timerField.backgroundColor = 0x058255;
 		timerField.defaultTextFormat = scoreTextFormat;
 		timerField.selectable = false;
 		timerField.border = true;
@@ -94,15 +114,15 @@ class Main extends Sprite
 	
 	function newGame()
 	{		
-		spawnTimer = 60;
+		spawnTimer = 15;
 		spawned = false;
 		hit = false;
 		enemies = new Array<Enemy>();
 		
 		//Adding the player
 		
-		player.playerBitmap.x = 640;
-		player.playerBitmap.y = 360;
+		player.tilemap.x = 640;
+		player.tilemap.y = 360;
 		
 		//Adding an enemy
 		var enemy = new Enemy();
@@ -140,7 +160,7 @@ class Main extends Sprite
 		{
 			abilityTimer = 0;
 		}
-		
+		/*
 		if (hit == false && spawned == true )
 		{
 			//Check if any enemy collides with the player
@@ -150,7 +170,7 @@ class Main extends Sprite
 				var enemyRotationSpeed = .5;
 				
 				// Getting its target(the player)
-				var enemyRotationInRadians = Math.atan2( player.playerBitmap.y + player.playerBitmap.height/2 - enemy.enemyBitmap.y, player.playerBitmap.x + player.playerBitmap.width/2 - enemy.enemyBitmap.x );
+				var enemyRotationInRadians = Math.atan2( player.tilemap.y + player.tilemap.height/2 - enemy.enemyBitmap.y, player.tilemap.x + player.tilemap.width/2 - enemy.enemyBitmap.x );
 				
 				// Translating to a sensible unit of measure and applying the rotation with the delay
 				var enemyRotationInDegrees = enemyRotationInRadians * 180 / Math.PI;
@@ -162,9 +182,10 @@ class Main extends Sprite
 				enemy.enemyBitmap.x += velocity.x;
 				enemy.enemyBitmap.y += velocity.y;
 				
+				
 				// Collision code if any enemy has interacted with the player
-				if ((player.playerBitmap.x + player.playerBitmap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.playerBitmap.x + player.playerBitmap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
-				&& (player.playerBitmap.y + player.playerBitmap.height/2 > enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 - 50 && player.playerBitmap.y + player.playerBitmap.height/2 < enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 + 50)) 
+				if ((player.tilemap.x + player.tilemap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.tilemap.x + player.tilemap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
+				&& (player.tilemap.y + player.tilemap.height/2 > enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 - 50 && player.tilemap.y + player.tilemap.height/2 < enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 + 50)) 
 				{
 					hit = true;
 					
@@ -201,8 +222,10 @@ class Main extends Sprite
 					restartButton.addEventListener(MouseEvent.CLICK, restartClicked);
 					addChild(restartButton);
 				}
+				
 			}
 		}
+		*/
 		
 		// Code to run for each enemy
 		for (enemy in enemies)
@@ -250,12 +273,37 @@ class Main extends Sprite
 			canFireQ = true;
 		}
 		
+		if (runes.length <= 0 && abilityTimer == 0)
+		{
+			canFireQ = false;
+			
+			abilityTimer = abilityTimerLength;
+		}
+		if (abilityTimer == 1) addRunes();
+		trace("runes " + runes.length);
+		
+	}
+	
+	function addRunes()
+	{
+		for (i in 0...5)
+		{
+			var rune:Bitmap = new Bitmap(runeData);
+			rune.y = UIbar.y + 10;
+			rune.x = 420 + i * 91;
+			rune.scaleX = rune.scaleY = .3;
+			addChild(rune);
+			runes.push(rune);
+		}
 	}
 	
 	public function abil(Event: MouseEvent)
 	{
-		if (canFireQ)
+		if (canFireQ && runes.length > 0)
 		{
+			var rune : Bitmap = runes.pop();
+			removeChild(rune);
+			
 			var ability = new Ability();
 			
 			// Centering its origin point
@@ -263,8 +311,8 @@ class Main extends Sprite
 			ability.tilemap.y = -ability.height / 2;
 			
 			// Position the ability around the player's hand
-			ability.x = player.playerBitmap.x + 32;
-			ability.y = player.playerBitmap.y + 36;
+			ability.x = player.tilemap.x + 32;
+			ability.y = player.tilemap.y + 36;
 			
 			// Telling it to go towards the mouse
 			var rotationInRadians = Math.atan2( Lib.current.stage.mouseY - ability.y, Lib.current.stage.mouseX - ability.x );
@@ -278,10 +326,6 @@ class Main extends Sprite
 			// It's added to the storage array and on the screen
 			abilities.push(ability);
 			addChild(ability);
-			
-			canFireQ = false;
-			
-			abilityTimer = 60;
 		}
 	}
 	

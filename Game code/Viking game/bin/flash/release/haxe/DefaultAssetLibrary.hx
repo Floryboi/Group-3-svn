@@ -73,38 +73,35 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
-		
 		#end
 		
 		#if flash
 		
-		path.set ("img/abilitySheet.png", "img/abilitySheet.png");
+		className.set ("img/abilitySheet.png", __ASSET__img_abilitysheet_png);
 		type.set ("img/abilitySheet.png", AssetType.IMAGE);
-		path.set ("img/ability_test.png", "img/ability_test.png");
+		className.set ("img/ability_test.png", __ASSET__img_ability_test_png);
 		type.set ("img/ability_test.png", AssetType.IMAGE);
-		path.set ("img/block.png", "img/block.png");
+		className.set ("img/block.png", __ASSET__img_block_png);
 		type.set ("img/block.png", AssetType.IMAGE);
-		path.set ("img/dinoUnicorn.png", "img/dinoUnicorn.png");
+		className.set ("img/dinoUnicorn.png", __ASSET__img_dinounicorn_png);
 		type.set ("img/dinoUnicorn.png", AssetType.IMAGE);
-		path.set ("img/obstacle_placeholder.png", "img/obstacle_placeholder.png");
+		className.set ("img/obstacle_placeholder.png", __ASSET__img_obstacle_placeholder_png);
 		type.set ("img/obstacle_placeholder.png", AssetType.IMAGE);
-		path.set ("img/restart.png", "img/restart.png");
+		className.set ("img/restart.png", __ASSET__img_restart_png);
 		type.set ("img/restart.png", AssetType.IMAGE);
-		path.set ("img/rune.png", "img/rune.png");
-		type.set ("img/rune.png", AssetType.IMAGE);
-		path.set ("img/snow.png", "img/snow.png");
+		className.set ("img/snow.png", __ASSET__img_snow_png);
 		type.set ("img/snow.png", AssetType.IMAGE);
-		path.set ("img/SpikeDude.png", "img/SpikeDude.png");
+		className.set ("img/SpikeDude.png", __ASSET__img_spikedude_png);
 		type.set ("img/SpikeDude.png", AssetType.IMAGE);
-		path.set ("img/UIbar.png", "img/UIbar.png");
+		className.set ("img/UIbar.png", __ASSET__img_uibar_png);
 		type.set ("img/UIbar.png", AssetType.IMAGE);
-		path.set ("img/Viking.png", "img/Viking.png");
+		className.set ("img/Viking.png", __ASSET__img_viking_png);
 		type.set ("img/Viking.png", AssetType.IMAGE);
-		path.set ("img/VikingGood.png", "img/VikingGood.png");
+		className.set ("img/VikingGood.png", __ASSET__img_vikinggood_png);
 		type.set ("img/VikingGood.png", AssetType.IMAGE);
-		path.set ("img/VikingLeft.png", "img/VikingLeft.png");
+		className.set ("img/VikingLeft.png", __ASSET__img_vikingleft_png);
 		type.set ("img/VikingLeft.png", AssetType.IMAGE);
-		path.set ("img/vikingWalk.png", "img/vikingWalk.png");
+		className.set ("img/vikingWalk.png", __ASSET__img_vikingwalk_png);
 		type.set ("img/vikingWalk.png", AssetType.IMAGE);
 		
 		
@@ -113,45 +110,55 @@ class DefaultAssetLibrary extends AssetLibrary {
 		var id;
 		id = "img/abilitySheet.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/ability_test.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/block.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/dinoUnicorn.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/obstacle_placeholder.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/restart.png";
 		path.set (id, id);
-		type.set (id, AssetType.IMAGE);
-		id = "img/rune.png";
-		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/snow.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/SpikeDude.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/UIbar.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/Viking.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/VikingGood.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/VikingLeft.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		id = "img/vikingWalk.png";
 		path.set (id, id);
+		
 		type.set (id, AssetType.IMAGE);
 		
 		
@@ -170,20 +177,45 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
-		useManifest = true;
+		
+		className.set ("img/abilitySheet.png", __ASSET__img_abilitysheet_png);
+		type.set ("img/abilitySheet.png", AssetType.IMAGE);
+		
+		className.set ("img/ability_test.png", __ASSET__img_ability_test_png);
+		type.set ("img/ability_test.png", AssetType.IMAGE);
+		
+		className.set ("img/block.png", __ASSET__img_block_png);
+		type.set ("img/block.png", AssetType.IMAGE);
+		
+		className.set ("img/dinoUnicorn.png", __ASSET__img_dinounicorn_png);
+		type.set ("img/dinoUnicorn.png", AssetType.IMAGE);
+		
+		className.set ("img/obstacle_placeholder.png", __ASSET__img_obstacle_placeholder_png);
+		type.set ("img/obstacle_placeholder.png", AssetType.IMAGE);
+		
+		className.set ("img/restart.png", __ASSET__img_restart_png);
+		type.set ("img/restart.png", AssetType.IMAGE);
+		
+		className.set ("img/snow.png", __ASSET__img_snow_png);
+		type.set ("img/snow.png", AssetType.IMAGE);
+		
+		className.set ("img/SpikeDude.png", __ASSET__img_spikedude_png);
+		type.set ("img/SpikeDude.png", AssetType.IMAGE);
+		
+		className.set ("img/UIbar.png", __ASSET__img_uibar_png);
+		type.set ("img/UIbar.png", AssetType.IMAGE);
+		
+		className.set ("img/Viking.png", __ASSET__img_viking_png);
+		type.set ("img/Viking.png", AssetType.IMAGE);
+		
+		className.set ("img/VikingGood.png", __ASSET__img_vikinggood_png);
+		type.set ("img/VikingGood.png", AssetType.IMAGE);
+		
+		className.set ("img/VikingLeft.png", __ASSET__img_vikingleft_png);
+		type.set ("img/VikingLeft.png", AssetType.IMAGE);
+		
+		className.set ("img/vikingWalk.png", __ASSET__img_vikingwalk_png);
+		type.set ("img/vikingWalk.png", AssetType.IMAGE);
 		
 		
 		if (useManifest) {
@@ -822,24 +854,22 @@ class DefaultAssetLibrary extends AssetLibrary {
 #if !display
 #if flash
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@:keep @:bind #if display private #end class __ASSET__img_abilitysheet_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_ability_test_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_block_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_dinounicorn_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_obstacle_placeholder_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_restart_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_snow_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_spikedude_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_uibar_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_viking_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_vikinggood_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_vikingleft_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__img_vikingwalk_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 
 
 #elseif html5
-
 
 
 
@@ -863,6 +893,19 @@ class DefaultAssetLibrary extends AssetLibrary {
 #if (windows || mac || linux || cpp)
 
 
+@:image("assets/img/abilitySheet.png") #if display private #end class __ASSET__img_abilitysheet_png extends lime.graphics.Image {}
+@:image("assets/img/ability_test.png") #if display private #end class __ASSET__img_ability_test_png extends lime.graphics.Image {}
+@:image("assets/img/block.png") #if display private #end class __ASSET__img_block_png extends lime.graphics.Image {}
+@:image("assets/img/dinoUnicorn.png") #if display private #end class __ASSET__img_dinounicorn_png extends lime.graphics.Image {}
+@:image("assets/img/obstacle_placeholder.png") #if display private #end class __ASSET__img_obstacle_placeholder_png extends lime.graphics.Image {}
+@:image("assets/img/restart.png") #if display private #end class __ASSET__img_restart_png extends lime.graphics.Image {}
+@:image("assets/img/snow.png") #if display private #end class __ASSET__img_snow_png extends lime.graphics.Image {}
+@:image("assets/img/SpikeDude.png") #if display private #end class __ASSET__img_spikedude_png extends lime.graphics.Image {}
+@:image("assets/img/UIbar.png") #if display private #end class __ASSET__img_uibar_png extends lime.graphics.Image {}
+@:image("assets/img/Viking.png") #if display private #end class __ASSET__img_viking_png extends lime.graphics.Image {}
+@:image("assets/img/VikingGood.png") #if display private #end class __ASSET__img_vikinggood_png extends lime.graphics.Image {}
+@:image("assets/img/VikingLeft.png") #if display private #end class __ASSET__img_vikingleft_png extends lime.graphics.Image {}
+@:image("assets/img/vikingWalk.png") #if display private #end class __ASSET__img_vikingwalk_png extends lime.graphics.Image {}
 
 
 

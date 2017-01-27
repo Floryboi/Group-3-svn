@@ -32,7 +32,7 @@ class Enemy extends Sprite
 		//level = new Level(); //Reference to the level
 		
 		//Assigning the player's texture
-		var enemyData:BitmapData = Assets.getBitmapData( "img/SpikeDude.png" ); 
+		var enemyData:BitmapData = Assets.getBitmapData( "img/dinoUnicorn.png" ); 
     	enemyBitmap = new Bitmap( enemyData );
 		
 		//We don't have to do this, but he looks much better. Draws the focus to him instead of the ground or background

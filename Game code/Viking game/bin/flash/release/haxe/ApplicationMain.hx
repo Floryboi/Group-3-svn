@@ -26,7 +26,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "1204",
+			build: "1105",
 			company: "Top keks",
 			file: "ProjectGame",
 			fps: 60,
@@ -37,7 +37,7 @@ class ApplicationMain {
 			windows: [
 				
 				{
-					allowHighDPI: false,
+					allowHighDPI: true,
 					antialiasing: 0,
 					background: 16777215,
 					borderless: false,
@@ -72,7 +72,7 @@ class ApplicationMain {
 		
 		#if (js && html5)
 		#if (munit || utest)
-		embed (null, 1280, 720, "null");
+		embed (null, 1280, 720, "FFFFFF");
 		#end
 		#else
 		create ();
@@ -95,6 +95,58 @@ class ApplicationMain {
 		#if (js && html5)
 		var urls = [];
 		var types = [];
+		
+		
+		urls.push ("img/abilitySheet.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/ability_test.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/block.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/dinoUnicorn.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/obstacle_placeholder.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/restart.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/snow.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/SpikeDude.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/UIbar.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/Viking.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/VikingGood.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/VikingLeft.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("img/vikingWalk.png");
+		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
 		
