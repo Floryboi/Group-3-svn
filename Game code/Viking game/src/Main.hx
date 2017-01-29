@@ -1,6 +1,7 @@
 package;
 
 import flash.events.Event;
+import flash.media.Sound;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.events.KeyboardEvent;
@@ -66,7 +67,8 @@ class Main extends Sprite
 	{
 		super();
 		
-		//abilityTimer = abilityTimerLength;
+		var sound:Sound = Assets.getSound("audio/music.wav");
+		sound.play();
 		
 		keys = [];
 		
@@ -160,7 +162,7 @@ class Main extends Sprite
 		{
 			abilityTimer = 0;
 		}
-		/*
+		
 		if (hit == false && spawned == true )
 		{
 			//Check if any enemy collides with the player
@@ -225,7 +227,7 @@ class Main extends Sprite
 				
 			}
 		}
-		*/
+		
 		
 		// Code to run for each enemy
 		for (enemy in enemies)
@@ -266,7 +268,7 @@ class Main extends Sprite
 			ability.everyFrame();
 		}
 		
-		trace(abilityTimer);
+		//trace(abilityTimer);
 		
 		if (keys[81] && abilityTimer == 0) 
 		{
@@ -280,7 +282,7 @@ class Main extends Sprite
 			abilityTimer = abilityTimerLength;
 		}
 		if (abilityTimer == 1) addRunes();
-		trace("runes " + runes.length);
+		//trace("runes " + runes.length);
 		
 	}
 	
@@ -294,6 +296,7 @@ class Main extends Sprite
 			rune.scaleX = rune.scaleY = .3;
 			addChild(rune);
 			runes.push(rune);
+			//trace("add rune");
 		}
 	}
 	

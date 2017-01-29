@@ -61,20 +61,104 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		#end
 		
 		#if flash
 		
+		path.set ("img/abilitySheet.png", "img/abilitySheet.png");
+		type.set ("img/abilitySheet.png", AssetType.IMAGE);
+		path.set ("img/ability_test.png", "img/ability_test.png");
+		type.set ("img/ability_test.png", AssetType.IMAGE);
+		path.set ("img/block.png", "img/block.png");
+		type.set ("img/block.png", AssetType.IMAGE);
+		path.set ("img/dinoUnicorn.png", "img/dinoUnicorn.png");
+		type.set ("img/dinoUnicorn.png", AssetType.IMAGE);
+		path.set ("img/obstacle_placeholder.png", "img/obstacle_placeholder.png");
+		type.set ("img/obstacle_placeholder.png", AssetType.IMAGE);
+		path.set ("img/restart.png", "img/restart.png");
+		type.set ("img/restart.png", AssetType.IMAGE);
+		path.set ("img/rune.png", "img/rune.png");
+		type.set ("img/rune.png", AssetType.IMAGE);
+		path.set ("img/snow.png", "img/snow.png");
+		type.set ("img/snow.png", AssetType.IMAGE);
+		path.set ("img/SpikeDude.png", "img/SpikeDude.png");
+		type.set ("img/SpikeDude.png", AssetType.IMAGE);
+		path.set ("img/UIbar.png", "img/UIbar.png");
+		type.set ("img/UIbar.png", AssetType.IMAGE);
 		path.set ("img/Viking.png", "img/Viking.png");
 		type.set ("img/Viking.png", AssetType.IMAGE);
+		path.set ("img/VikingGood.png", "img/VikingGood.png");
+		type.set ("img/VikingGood.png", AssetType.IMAGE);
+		path.set ("img/VikingLeft.png", "img/VikingLeft.png");
+		type.set ("img/VikingLeft.png", AssetType.IMAGE);
+		path.set ("img/vikingWalk.png", "img/vikingWalk.png");
+		type.set ("img/vikingWalk.png", AssetType.IMAGE);
+		path.set ("audio/music.wav", "audio/music.wav");
+		type.set ("audio/music.wav", AssetType.SOUND);
 		
 		
 		#elseif html5
 		
 		var id;
+		id = "img/abilitySheet.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/ability_test.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/block.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/dinoUnicorn.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/obstacle_placeholder.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/restart.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/rune.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/snow.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/SpikeDude.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/UIbar.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
 		id = "img/Viking.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
+		id = "img/VikingGood.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/VikingLeft.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "img/vikingWalk.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "audio/music.wav";
+		path.set (id, id);
+		type.set (id, AssetType.SOUND);
 		
 		
 		var assetsPrefix = null;
@@ -92,6 +176,20 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
 		useManifest = true;
 		
 		
@@ -734,7 +832,35 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #elseif html5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -26,8 +26,8 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "138",
-			company: "Archbishop of Banterberry",
+			build: "1233",
+			company: "Top keks",
 			file: "ProjectGame",
 			fps: 60,
 			name: "Project Game",
@@ -45,7 +45,7 @@ class ApplicationMain {
 					display: 0,
 					fullscreen: false,
 					hardware: true,
-					height: 480,
+					height: 720,
 					hidden: #if munit true #else null #end,
 					maximized: null,
 					minimized: null,
@@ -54,7 +54,7 @@ class ApplicationMain {
 					stencilBuffer: true,
 					title: "Project Game",
 					vsync: false,
-					width: 800,
+					width: 1280,
 					x: null,
 					y: null
 				},
@@ -72,7 +72,7 @@ class ApplicationMain {
 		
 		#if (js && html5)
 		#if (munit || utest)
-		embed (null, 800, 480, "null");
+		embed (null, 1280, 720, "null");
 		#end
 		#else
 		create ();

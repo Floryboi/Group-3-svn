@@ -22,7 +22,7 @@
     <class path="src" />
     <class path="C:\HaxeToolkit\haxe\lib\openfl\4,4,1\externs\core\openfl" />
     <class path="C:\HaxeToolkit\haxe\lib\openfl\4,4,1\externs\extras" />
-    <class path="bin\windows\neko\release\haxe" />
+    <class path="bin\windows\neko\debug\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -31,7 +31,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;--remap flash:openfl" />
+    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;--remap flash:openfl&#xA;-debug " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

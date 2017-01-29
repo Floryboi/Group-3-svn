@@ -74,6 +74,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
 		#end
 		
 		#if flash
@@ -106,6 +107,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("img/VikingLeft.png", AssetType.IMAGE);
 		path.set ("img/vikingWalk.png", "img/vikingWalk.png");
 		type.set ("img/vikingWalk.png", AssetType.IMAGE);
+		path.set ("audio/music.wav", "audio/music.wav");
+		type.set ("audio/music.wav", AssetType.SOUND);
 		
 		
 		#elseif html5
@@ -153,6 +156,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 		id = "img/vikingWalk.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
+		id = "audio/music.wav";
+		path.set (id, id);
+		type.set (id, AssetType.SOUND);
 		
 		
 		var assetsPrefix = null;
@@ -170,6 +176,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
+		useManifest = true;
 		useManifest = true;
 		useManifest = true;
 		useManifest = true;
@@ -838,7 +845,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
+
 #elseif html5
+
 
 
 
