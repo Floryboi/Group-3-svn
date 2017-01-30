@@ -63,12 +63,13 @@ class Main extends Sprite
 	var UIbarData:BitmapData = Assets.getBitmapData("img/UIbar.png");
 	var UIbar:Bitmap;
 	
+	var music:Sound = Assets.getSound("audio/music.wav");
+	
 	public function new() 
 	{
 		super();
 		
-		var sound:Sound = Assets.getSound("audio/music.wav");
-		sound.play();
+		
 		
 		keys = [];
 		
@@ -79,12 +80,10 @@ class Main extends Sprite
 		addChild(level);
 		
 		UIbar = new Bitmap(UIbarData);
-		UIbar.scaleX = UIbar.scaleY = .5;
+		//UIbar.scaleX = UIbar.scaleY = .5;
 		UIbar.y = Lib.current.stage.stageHeight - UIbar.height;
 		UIbar.x = Lib.current.stage.stageWidth/2 - UIbar.width/2;
 		addChild(UIbar);
-		
-		addRunes();
 		
 		addChild(scoreField);
 		scoreField.width = 350;
@@ -116,6 +115,7 @@ class Main extends Sprite
 	
 	function newGame()
 	{		
+		abilityTimer = 0;
 		spawnTimer = 15;
 		spawned = false;
 		hit = false;
@@ -140,6 +140,10 @@ class Main extends Sprite
 		stage.addEventListener(MouseEvent.CLICK, abil);
 		
 		stage.addEventListener(Event.ENTER_FRAME, everyFrame);
+		
+		addRunes();
+		
+		music.play();
 	}
 	
 	function everyFrame(evt:Event):Void
@@ -184,7 +188,6 @@ class Main extends Sprite
 				enemy.enemyBitmap.x += velocity.x;
 				enemy.enemyBitmap.y += velocity.y;
 				
-				
 				// Collision code if any enemy has interacted with the player
 				if ((player.tilemap.x + player.tilemap.width/2 > enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 - 50 && player.tilemap.x + player.tilemap.width/2 < enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 + 50)
 				&& (player.tilemap.y + player.tilemap.height/2 > enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 - 50 && player.tilemap.y + player.tilemap.height/2 < enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 + 50)) 
@@ -193,6 +196,8 @@ class Main extends Sprite
 					
 					timer = 0;
 					score = 0;
+					
+					removeRunes();
 					
 					// The game over text
 					addChild(endGameField);
@@ -224,7 +229,6 @@ class Main extends Sprite
 					restartButton.addEventListener(MouseEvent.CLICK, restartClicked);
 					addChild(restartButton);
 				}
-				
 			}
 		}
 		
@@ -268,7 +272,7 @@ class Main extends Sprite
 			ability.everyFrame();
 		}
 		
-		//trace(abilityTimer);
+		trace(abilityTimer);
 		
 		if (keys[81] && abilityTimer == 0) 
 		{
@@ -286,17 +290,27 @@ class Main extends Sprite
 		
 	}
 	
+	function removeRunes()
+	{
+		for (rune in 0...runes.length)
+		{
+			var rune : Bitmap = runes.pop();
+			removeChild(rune);
+			trace("removing runes " + runes.length);
+		}
+	}
+	
 	function addRunes()
 	{
 		for (i in 0...5)
 		{
 			var rune:Bitmap = new Bitmap(runeData);
-			rune.y = UIbar.y + 10;
-			rune.x = 420 + i * 91;
-			rune.scaleX = rune.scaleY = .3;
+			rune.y = UIbar.y + 5;
+			rune.x = UIbar.x + 21 + (i * (rune.width + 5));
+			
 			addChild(rune);
 			runes.push(rune);
-			//trace("add rune");
+			trace("adding runes " + runes.length);
 		}
 	}
 	
