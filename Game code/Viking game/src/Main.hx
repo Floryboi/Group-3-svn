@@ -64,12 +64,12 @@ class Main extends Sprite
 	var UIbar:Bitmap;
 	
 	var music:Sound = Assets.getSound("audio/music.wav");
+	var shoot:Sound = Assets.getSound("audio/shoot.wav");
+	var death:Sound = Assets.getSound("audio/death.wav");
 	
 	public function new() 
 	{
-		super();
-		
-		
+		super();		
 		
 		keys = [];
 		
@@ -80,7 +80,6 @@ class Main extends Sprite
 		addChild(level);
 		
 		UIbar = new Bitmap(UIbarData);
-		//UIbar.scaleX = UIbar.scaleY = .5;
 		UIbar.y = Lib.current.stage.stageHeight - UIbar.height;
 		UIbar.x = Lib.current.stage.stageWidth/2 - UIbar.width/2;
 		addChild(UIbar);
@@ -110,11 +109,14 @@ class Main extends Sprite
 		player = new Player();
 		addChild(player);
 		
+		music.play(0, 99999);
+		
 		newGame();
 	}
 	
 	function newGame()
 	{		
+		
 		abilityTimer = 0;
 		spawnTimer = 15;
 		spawned = false;
@@ -142,8 +144,6 @@ class Main extends Sprite
 		stage.addEventListener(Event.ENTER_FRAME, everyFrame);
 		
 		addRunes();
-		
-		music.play();
 	}
 	
 	function everyFrame(evt:Event):Void
@@ -243,6 +243,7 @@ class Main extends Sprite
 				if ((enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 > ability.x + ability.width/2 - 45 && enemy.enemyBitmap.x + enemy.enemyBitmap.width/2 < ability.x + ability.width/2 + 45)
 				&& (enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 > ability.y + ability.height/2 - 45 && enemy.enemyBitmap.y + enemy.enemyBitmap.height/2 < ability.y + ability.height/2 + 45)) 
 				{
+					death.play();
 					// Increase the score, remove the enemy and ability from the screen
 					score++;
 					enemies.remove(enemy);
@@ -343,6 +344,7 @@ class Main extends Sprite
 			// It's added to the storage array and on the screen
 			abilities.push(ability);
 			addChild(ability);
+			shoot.play();
 		}
 	}
 	
