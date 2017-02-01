@@ -413,3 +413,4 @@ class Main extends Sprite
 		keys[evt.keyCode] = false;
 	}
 }
+
