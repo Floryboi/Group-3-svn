@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- NMML reference: https://gist.github.com/1763850 -->
+	
+	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
+	<meta title="Project Game" package="ProjectGame" version="1.0.0" company="Top keks" />
+	
+	<!-- output -->
+	<app main="Main" file="ProjectGame" path="bin" />
+	
+	<window background="#FFFFFF" fps="60" />
+	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
+	<window width="1280" height="720" />
+	<!-- <window fullscreen="true" />
+	
+	<!-- classpath, haxe libs -->
+	<source path="src" />
+	<haxelib name="openfl" />
+	<haxelib name="actuate" />
+	
+	<!-- assets -->
+	<icon path="assets/openfl.svg" />
+	<assets path="assets/img" rename="img" />
+	<assets path="assets/audio" rename="audio" />
+	
+	<!-- optimize output
+	<haxeflag name="-dce full" /> -->
+	
+</project>
